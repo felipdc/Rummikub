@@ -38,13 +38,13 @@ typedef enum {blue, yellow, black, red} Color;
 struct set {
 	bool run;	// True se o set eh do tipo RUN, false caso tipo GROUP
 	Color color;	// Cor das pecas caso o set for do tipo GROUP
-	char *set_piece[NUM_COLOR_PIECES]	// Guarda as pecas do set
+	char *set_piece[NUM_COLOR_PIECES];	// Guarda as pecas do set
 	struct set *next;	// Aponta para o proximo set formado no jogo
 }; typedef struct set Set;
 
 
 struct hand {
-	unsigned card_num // Numero total de pecas na mao do jogador
+	unsigned card_num; // Numero total de pecas na mao do jogador
 	char *piece[NUM_PIECES];	// Pecas na mao do jogador
 	struct hand *next;	// Aponta para o proximo jogador no jogo	
 }; typedef struct hand Hand;
