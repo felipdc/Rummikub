@@ -40,7 +40,7 @@
 #define INITIAL_HAND_SIZE 14
 
 
-typedef enum {blue, yellow, black, red} Color;
+typedef enum {blue, yellow, black, red, none} Color;	//none is joker's color
 
 
 struct set {
@@ -60,21 +60,15 @@ struct hand {
 
 struct piece {
 	Color color;	// Cor da peca
-	unsigned num;	// Valor da peca (1 a D)
+	const char *info;	// Valor da peca (1 a D) com a cor
 	struct piece *next;	// Aponta para a proxima peca da pilha
 }; typedef struct piece Piece;
-
 
 struct board {
 	Piece *p;	// Aponta para a pilha de pecas
 	Set *s;		// Aponta para a lista de sets formados no jogo
 	Hand *h;	// Aponta para a lista de jogadores no jogo
 }; typedef struct board Board;
-
-struct card {
-	const char *info;	//! = blue; @ = yellow; # = black; $ = red; ** = joker
-	struct card *next;
-}; typedef struct card Card;
 
 const char *blue_piece[] = {"1!", "2!", "3!", "4!",
 				 "5!", "6!", "7!",
@@ -110,56 +104,69 @@ const char *red_piece[] = {"1$", "2$", "3$", "4$",
 
 const char *joker[] = {"**", "**"};
 
-Card *create_card(const char *newcard){
+Piece *create_piece(const char *newcard, Color color){
 
-	Card *New = NULL;
-	New = (Card *)malloc(sizeof(Card));
+	Piece *New = NULL;
+	New = (Piece *)malloc(sizeof(Piece));
+	New->color = color;
 	New->info = newcard;
 	New->next = NULL;
 	return New;
 }
 
-Card *insert(Card *Pack, Card *New){
+Piece *insert(Piece *Pack, Piece *New){
 
-	if(Pack == NULL){
+	Piece *Aux = Pack;
+
+	if(Aux == NULL){
 		return New;
 	}
-	Pack->next = insert(Pack->next, New);
+
+	while(Aux->next != NULL){
+		Aux = Aux->next;
+	}
+	Aux->next = New;
 	return Pack;
 }
 
-Card *create_pack(Card *Pack){
+Piece *create_pack(Piece *Pack){
 
 	int i = 0;
 	int number_aux = 0;
 	int color_aux = 0;
+	Color color = none;
 	const char *info = NULL;
-	Card *Aux = NULL;
+	Piece *Aux = NULL;
 
 	while(i < NUM_PIECES){
 		number_aux = i / 4;
 
 		switch(i % 4){
 			case 0:	//blue !
+				color = blue;
 				info = blue_piece[number_aux];
 				break;
 			case 1: //yellow @
+				color = yellow;
 				info = yellow_piece[number_aux];
 				break;
 			case 2: //black #
+				color = black;
 				info = black_piece[number_aux];
 				break;
 			case 3: //red $
+				color = red;
 				info = red_piece[number_aux];
 				break;
 		}
-		Aux = create_card(info);
+		Aux = create_piece(info, color);
 		Pack = insert(Pack, Aux);
 		++i;
 	}
 	i = 0;
+	color = none;
 	while(i < NUM_JOKER){
-		Aux = create_card("**");
+		Aux = create_piece("**", color);
 		Pack = insert(Pack, Aux);
 		++i;
 	}
@@ -167,9 +174,9 @@ Card *create_pack(Card *Pack){
 	return Pack;
 }
 
-Card *show_pack(Card *Pack){
+Piece *show_pack(Piece *Pack){
 
-	Card *Aux = Pack;
+	Piece *Aux = Pack;
 
 	while(Aux != NULL){
 		printf("%s\n", Aux->info);
@@ -178,12 +185,13 @@ Card *show_pack(Card *Pack){
 	return Pack;
 }
 
-Card *switch_card(Card *Pack, int Posit1, int Posit2){
+Piece *switch_piece(Piece *Pack, int Posit1, int Posit2){
 
 	int i = 0;
-	Card *Aux1 = Pack;
-	Card *Aux2 = Pack;
-	const char *Temp = NULL;
+	Piece *Aux1 = Pack;
+	Piece *Aux2 = Pack;
+	const char *TempInfo = NULL;
+	Color TempColor = none;
 
 	while(i < Posit1){
 		Aux1 = Aux1->next;
@@ -195,13 +203,16 @@ Card *switch_card(Card *Pack, int Posit1, int Posit2){
 		++i;
 	}
 
-	Temp = Aux1->info;
+	TempInfo = Aux1->info;
 	Aux1->info = Aux2->info;
-	Aux2->info = Temp;
+	Aux2->info = TempInfo;
+	TempColor = Aux1->color;
+	Aux1->color = Aux2->color;
+	Aux2->color = TempColor;
 	return Pack;
 }
 
-Card *shuffle_pack(Card *Pack, int Len){
+Piece *shuffle_pack(Piece *Pack, int Len){
 
 	int i = 0;
 	int n = 0;
@@ -213,8 +224,7 @@ Card *shuffle_pack(Card *Pack, int Len){
 		while(i == n){
 			n = rand() % Len;
 		}
-		printf("i n %d %d\n", i, n);
-		Pack = switch_card(Pack, i, n);
+		Pack = switch_piece(Pack, i, n);
 		++i;
 	}
 	return Pack;
@@ -222,10 +232,10 @@ Card *shuffle_pack(Card *Pack, int Len){
 
 int main (int argc, char *argv[]) {
 	
-	Card *Pack = NULL;
+	Piece *Pack = NULL;
 	Pack = create_pack(Pack);
 	Pack = show_pack(Pack);
-	printf("\n\n\n\n\n\n\n");
+	printf("\n\nShuffled pack: \n\n");
 	Pack = shuffle_pack(Pack, (NUM_PIECES + NUM_JOKER));
 	Pack = show_pack(Pack);
 
