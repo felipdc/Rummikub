@@ -58,8 +58,15 @@ struct hand {
 }; typedef struct hand Hand;
 
 
+struct piece {
+	Color color;	// Cor da peca
+	unsigned num;	// Valor da peca (1 a D)
+	struct piece *next;	// Aponta para a proxima peca da pilha
+}; typedef struct piece Piece;
+
+
 struct board {
-	char *piece[NUM_PIECES];	// Guarda as pecas ainda nao distribuidas
+	Piece *p;	// Aponta para a pilha de pecas
 	Set *s;		// Aponta para a lista de sets formados no jogo
 	Hand *h;	// Aponta para a lista de jogadores no jogo
 }; typedef struct board Board;
