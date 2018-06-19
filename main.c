@@ -46,32 +46,24 @@ typedef enum {blue, yellow, black, red, none} Color;	//none is joker's color
 struct set {
 	bool run;	// True se o set eh do tipo RUN, false caso tipo GROUP
 	Color color;	// Cor das pecas caso o set for do tipo GROUP
-	char *set_piece[NUM_COLOR_PIECES];	// Guarda as pecas do set
+	const char *set_piece[NUM_COLOR_PIECES];	// Guarda as pecas do set
 	struct set *next;	// Aponta para o proximo set formado no jogo
 }; typedef struct set Set;
 
 
 struct hand {
 	unsigned card_num; // Numero total de pecas na mao do jogador
-	char *piece[NUM_PIECES];	// Pecas na mao do jogador
+	const char *piece[NUM_PIECES];	// Pecas na mao do jogador
 	struct hand *next;	// Aponta para o proximo jogador no jogo	
 }; typedef struct hand Hand;
 
 
 struct piece {
 	Color color;	// Cor da peca
-<<<<<<< HEAD
 	const char *info;	// Valor da peca (1 a D) com a cor
 	struct piece *next;	// Aponta para a proxima peca da pilha
 }; typedef struct piece Piece;
 
-=======
-	unsigned num;	// Valor da peca (1 a D)
-	struct piece *next;	// Aponta para a proxima peca da pilha
-}; typedef struct piece Piece;
-
-
->>>>>>> 8c6784f26f7193c0fe692b9eb5664dfc600307bf
 struct board {
 	Piece *p;	// Aponta para a pilha de pecas
 	Set *s;		// Aponta para a lista de sets formados no jogo
@@ -122,7 +114,7 @@ Piece *create_piece(const char *newcard, Color color){
 	return New;
 }
 
-Piece *insert(Piece *Pack, Piece *New){
+Piece *insert_piece(Piece *Pack, Piece *New){
 
 	Piece *Aux = Pack;
 
@@ -168,14 +160,14 @@ Piece *create_pack(Piece *Pack){
 				break;
 		}
 		Aux = create_piece(info, color);
-		Pack = insert(Pack, Aux);
+		Pack = insert_piece(Pack, Aux);
 		++i;
 	}
 	i = 0;
 	color = none;
 	while(i < NUM_JOKER){
 		Aux = create_piece("**", color);
-		Pack = insert(Pack, Aux);
+		Pack = insert_piece(Pack, Aux);
 		++i;
 	}
 
@@ -238,7 +230,130 @@ Piece *shuffle_pack(Piece *Pack, int Len){
 	return Pack;
 }
 
+Hand *init_hand(){
+
+	int i = 0;
+	Hand *New = NULL;
+	New = (Hand *)malloc(sizeof(Hand));
+	New->card_num = 0;
+	New->next = NULL;
+
+	while(i < NUM_PIECES){
+		New->piece[i] = NULL;
+		++i;
+	}
+	return New;
+}
+
+Board *init_board(){
+
+	Board *NewBoard = NULL;
+	NewBoard = (Board *)malloc(sizeof(Board));
+	NewBoard->p = NULL;
+	NewBoard->s = NULL;
+	NewBoard->h = NULL;
+	return NewBoard;
+}
+
+Hand *insert_hand(Hand *Players, Hand *New){
+
+	Hand *Aux = Players;
+
+	if(Aux == NULL){
+		return New;
+	}
+
+	while(Aux->next != NULL){
+		Aux = Aux->next;
+	}
+	Aux->next = New;
+	return Players;
+}
+
+Piece *destroy(Piece *Pack){
+
+	if(Pack == NULL){
+		return Pack;
+	}
+	Pack->next = destroy(Pack->next);
+	free(Pack);
+	return NULL;
+}
+
+Piece *erase_pieces(Piece *Pack, int n){
+
+	int i = 0;
+	Piece *Temp = Pack;
+	Piece *AuxHead = NULL;
+	
+	while(i < n - 1){
+		Temp = Temp->next;
+		++i;
+	}
+	AuxHead = Temp->next;
+	Temp->next = NULL;
+	Pack = destroy(Pack);
+	return AuxHead;
+}
+
+Hand *hand_out(Piece *Pack, Hand *Player){
+
+	int i = 0;
+	Piece *Temp = Pack;
+
+	while(i < INITIAL_HAND_SIZE){
+		Player->piece[i] = Temp->info;
+		++i;
+		Temp = Temp->next;
+	}
+	Player->card_num = INITIAL_HAND_SIZE;
+	return Player;
+}
+
+Board *init_game(Piece *Pack, int NofPlayers){
+
+	int i = 0;
+	Board *NewBoard = init_board();
+	Hand *AuxHand = NULL;
+
+	while(i < NofPlayers){
+		AuxHand = init_hand();
+		AuxHand = hand_out(Pack, AuxHand);
+		NewBoard->h = insert_hand(NewBoard->h, AuxHand);
+		++i;
+	}
+	Pack = erase_pieces(Pack, NofPlayers * INITIAL_HAND_SIZE);
+	NewBoard->p = Pack;
+	return NewBoard;
+}
+
+Hand *show_hand(Hand *Player){
+
+	int i = 0;
+	Hand *Aux = Player;
+
+	while(Aux->piece[i] != NULL){
+		printf("%s\n", Aux->piece[i]);
+		++i;
+	}
+	return Player;
+}
+
 int main (int argc, char *argv[]) {
+
+	Board *NewBoard = NULL;
+	Piece *Pack = NULL;
+	Pack = create_pack(Pack);
+	Pack = shuffle_pack(Pack, NUM_PIECES + NUM_JOKER);
+	printf("\n\nInitial pack:\n\n");
+	Pack = show_pack(Pack);
+	NewBoard = init_game(Pack, 4);
+	printf("\n\nPack after hand out (to 4 players):\n\n");
+	//AQUI DA PROBLEMA
+	Pack = show_pack(Pack);
+	printf("\n\nPack after hand out (to 4 players):\n\n");
+	//AQUI NAO DA, MAS TEORICAMENTE NAO DEVERIA SER A MESMA COISA??
+	Pack = show_pack(NewBoard->p);
 
 	return 0;
 }

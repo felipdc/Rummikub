@@ -3,12 +3,12 @@
 -- Editem conforme necessidade do programa
 
 
-Funcao embaralhar
+Funcao embaralhar		//FEITO	
 @desc "Desordena" o vetor de strings board->piece que contem as pecas
 @param	Recebe board->piece (Vetor de strings do tabuleiro)
 @return Pode ser um void, alterando direto no endereco do parametro.
 
-Funcao iniciar jogo
+Funcao iniciar jogador	//FEITO
 @desc Tem que alocar memoria e iniciar a struct board e para a struct hand
 @param Pode ser sem parametro
 @return Retorna a struct board iniciada
