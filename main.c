@@ -60,6 +60,10 @@ struct hand {
 
 struct piece {
 	Color color;	// Cor da peca
+<<<<<<< HEAD
+=======
+	unsigned piece_num; // Numero da peca
+>>>>>>> b3006d16ade0af293e9254ccc98580b372822aaf
 	const char *info;	// Valor da peca (1 a D) com a cor
 	struct piece *next;	// Aponta para a proxima peca da pilha
 }; typedef struct piece Piece;
@@ -131,9 +135,7 @@ Piece *insert_piece(Piece *Pack, Piece *New){
 
 Piece *create_pack(Piece *Pack){
 
-	int i = 0;
-	int number_aux = 0;
-	int color_aux = 0;
+	int i = 0, number_aux = 0;
 	Color color = none;
 	const char *info = NULL;
 	Piece *Aux = NULL;
@@ -142,19 +144,19 @@ Piece *create_pack(Piece *Pack){
 		number_aux = i / 4;
 
 		switch(i % 4){
-			case 0:	//blue !
+			case blue:	//blue !
 				color = blue;
 				info = blue_piece[number_aux];
 				break;
-			case 1: //yellow @
+			case yellow: //yellow @
 				color = yellow;
 				info = yellow_piece[number_aux];
 				break;
-			case 2: //black #
+			case black: //black #
 				color = black;
 				info = black_piece[number_aux];
 				break;
-			case 3: //red $
+			case red: //red $
 				color = red;
 				info = red_piece[number_aux];
 				break;
@@ -341,7 +343,7 @@ Hand *show_hand(Hand *Player){
 
 int main (int argc, char *argv[]) {
 
-	Board *NewBoard = NULL;
+	/*Board *NewBoard = NULL;
 	Piece *Pack = NULL;
 	Pack = create_pack(Pack);
 	Pack = shuffle_pack(Pack, NUM_PIECES + NUM_JOKER);
@@ -354,6 +356,7 @@ int main (int argc, char *argv[]) {
 	printf("\n\nPack after hand out (to 4 players):\n\n");
 	//AQUI NAO DA, MAS TEORICAMENTE NAO DEVERIA SER A MESMA COISA??
 	Pack = show_pack(NewBoard->p);
+	*/
 
 	return 0;
 }
