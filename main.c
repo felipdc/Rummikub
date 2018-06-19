@@ -60,10 +60,18 @@ struct hand {
 
 struct piece {
 	Color color;	// Cor da peca
+<<<<<<< HEAD
 	const char *info;	// Valor da peca (1 a D) com a cor
 	struct piece *next;	// Aponta para a proxima peca da pilha
 }; typedef struct piece Piece;
 
+=======
+	unsigned num;	// Valor da peca (1 a D)
+	struct piece *next;	// Aponta para a proxima peca da pilha
+}; typedef struct piece Piece;
+
+
+>>>>>>> 8c6784f26f7193c0fe692b9eb5664dfc600307bf
 struct board {
 	Piece *p;	// Aponta para a pilha de pecas
 	Set *s;		// Aponta para a lista de sets formados no jogo
@@ -231,13 +239,6 @@ Piece *shuffle_pack(Piece *Pack, int Len){
 }
 
 int main (int argc, char *argv[]) {
-	
-	Piece *Pack = NULL;
-	Pack = create_pack(Pack);
-	Pack = show_pack(Pack);
-	printf("\n\nShuffled pack: \n\n");
-	Pack = shuffle_pack(Pack, (NUM_PIECES + NUM_JOKER));
-	Pack = show_pack(Pack);
 
 	return 0;
 }
