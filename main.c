@@ -60,18 +60,11 @@ struct hand {
 
 struct piece {
 	Color color;	// Cor da peca
-<<<<<<< HEAD
+	unsigned piece_num; // Numero da peca
 	const char *info;	// Valor da peca (1 a D) com a cor
 	struct piece *next;	// Aponta para a proxima peca da pilha
 }; typedef struct piece Piece;
 
-=======
-	unsigned num;	// Valor da peca (1 a D)
-	struct piece *next;	// Aponta para a proxima peca da pilha
-}; typedef struct piece Piece;
-
-
->>>>>>> 8c6784f26f7193c0fe692b9eb5664dfc600307bf
 struct board {
 	Piece *p;	// Aponta para a pilha de pecas
 	Set *s;		// Aponta para a lista de sets formados no jogo
@@ -139,9 +132,7 @@ Piece *insert(Piece *Pack, Piece *New){
 
 Piece *create_pack(Piece *Pack){
 
-	int i = 0;
-	int number_aux = 0;
-	int color_aux = 0;
+	int i = 0, number_aux = 0;
 	Color color = none;
 	const char *info = NULL;
 	Piece *Aux = NULL;
@@ -150,19 +141,19 @@ Piece *create_pack(Piece *Pack){
 		number_aux = i / 4;
 
 		switch(i % 4){
-			case 0:	//blue !
+			case blue:	//blue !
 				color = blue;
 				info = blue_piece[number_aux];
 				break;
-			case 1: //yellow @
+			case yellow: //yellow @
 				color = yellow;
 				info = yellow_piece[number_aux];
 				break;
-			case 2: //black #
+			case black: //black #
 				color = black;
 				info = black_piece[number_aux];
 				break;
-			case 3: //red $
+			case red: //red $
 				color = red;
 				info = red_piece[number_aux];
 				break;
