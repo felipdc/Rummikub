@@ -298,17 +298,17 @@ Piece *erase_pieces(Piece *Pack, int n){
 	return AuxHead;
 }
 
-Hand *hand_out(Piece *Pack, Hand *Player){
+Hand *hand_out(Piece *Pack, Hand *Player, int NPieces){
 
 	int i = 0;
 	Piece *Temp = Pack;
 
-	while(i < INITIAL_HAND_SIZE){
+	while(i < NPieces){
 		Player->piece[i] = Temp->info;
 		++i;
 		Temp = Temp->next;
 	}
-	Player->card_num = INITIAL_HAND_SIZE;
+	Player->card_num = Player->card_num + NPieces;
 	return Player;
 }
 
@@ -320,7 +320,7 @@ Board *init_game(Piece *Pack, int NofPlayers){
 
 	while(i < NofPlayers){
 		AuxHand = init_hand();
-		AuxHand = hand_out(Pack, AuxHand);
+		AuxHand = hand_out(Pack, AuxHand, INITIAL_HAND_SIZE);
 		NewBoard->h = insert_hand(NewBoard->h, AuxHand);
 		++i;
 	}
