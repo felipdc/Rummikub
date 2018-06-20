@@ -60,10 +60,6 @@ struct hand {
 
 struct piece {
 	Color color;	// Cor da peca
-<<<<<<< HEAD
-=======
-	unsigned piece_num; // Numero da peca
->>>>>>> b3006d16ade0af293e9254ccc98580b372822aaf
 	const char *info;	// Valor da peca (1 a D) com a cor
 	struct piece *next;	// Aponta para a proxima peca da pilha
 }; typedef struct piece Piece;
@@ -108,7 +104,7 @@ const char *red_piece[] = {"1$", "2$", "3$", "4$",
 
 const char *joker[] = {"**", "**"};
 
-Piece *create_piece(const char *newcard, Color color){
+Piece *create_piece(const char *newcard, Color color){	//Cria uma peça nova recebendo qual a peça (ex: 1!) e sua cor (ex: blue)
 
 	Piece *New = NULL;
 	New = (Piece *)malloc(sizeof(Piece));
@@ -118,7 +114,7 @@ Piece *create_piece(const char *newcard, Color color){
 	return New;
 }
 
-Piece *insert_piece(Piece *Pack, Piece *New){
+Piece *insert_piece(Piece *Pack, Piece *New){	//Insere uma peça nova no baralho (precisa estar inicializada)
 
 	Piece *Aux = Pack;
 
@@ -133,17 +129,17 @@ Piece *insert_piece(Piece *Pack, Piece *New){
 	return Pack;
 }
 
-Piece *create_pack(Piece *Pack){
+Piece *create_pack(Piece *Pack){	//Cria o baralho ordenado (1-D, !-@-#-$)
 
 	int i = 0, number_aux = 0;
 	Color color = none;
 	const char *info = NULL;
 	Piece *Aux = NULL;
 
-	while(i < NUM_PIECES){
-		number_aux = i / 4;
+	while(i < NUM_PIECES){	//Insere todas as peças com exceção dos jokers
+		number_aux = i / 4;	//Só aumenta uma unidade de 4 em 4
 
-		switch(i % 4){
+		switch(i % 4){	//Muda a cor ciclicamente, visto que os restos possiveis pra 4 são somente (0,1,2,3)
 			case blue:	//blue !
 				color = blue;
 				info = blue_piece[number_aux];
@@ -167,7 +163,7 @@ Piece *create_pack(Piece *Pack){
 	}
 	i = 0;
 	color = none;
-	while(i < NUM_JOKER){
+	while(i < NUM_JOKER){	//Insere os jokers com a cor "none"
 		Aux = create_piece("**", color);
 		Pack = insert_piece(Pack, Aux);
 		++i;
@@ -176,7 +172,7 @@ Piece *create_pack(Piece *Pack){
 	return Pack;
 }
 
-Piece *show_pack(Piece *Pack){
+Piece *show_pack(Piece *Pack){	//Exibe o pack
 
 	Piece *Aux = Pack;
 
@@ -187,7 +183,7 @@ Piece *show_pack(Piece *Pack){
 	return Pack;
 }
 
-Piece *switch_piece(Piece *Pack, int Posit1, int Posit2){
+Piece *switch_piece(Piece *Pack, int Posit1, int Posit2){	//Troca os dados de duas peças
 
 	int i = 0;
 	Piece *Aux1 = Pack;
@@ -214,7 +210,7 @@ Piece *switch_piece(Piece *Pack, int Posit1, int Posit2){
 	return Pack;
 }
 
-Piece *shuffle_pack(Piece *Pack, int Len){
+Piece *shuffle_pack(Piece *Pack, int Len){	//Embaralha o pack (já tem que ter sido criado com a funcao create_pack)
 
 	int i = 0;
 	int n = 0;
@@ -232,7 +228,7 @@ Piece *shuffle_pack(Piece *Pack, int Len){
 	return Pack;
 }
 
-Hand *init_hand(){
+Hand *init_hand(){	//Inicializa uma mão de um jogador
 
 	int i = 0;
 	Hand *New = NULL;
@@ -247,7 +243,7 @@ Hand *init_hand(){
 	return New;
 }
 
-Board *init_board(){
+Board *init_board(){	//Inicializa um tabuleiro novo
 
 	Board *NewBoard = NULL;
 	NewBoard = (Board *)malloc(sizeof(Board));
@@ -257,7 +253,7 @@ Board *init_board(){
 	return NewBoard;
 }
 
-Hand *insert_hand(Hand *Players, Hand *New){
+Hand *insert_hand(Hand *Players, Hand *New){	//Insere uma mão nova nas existentes
 
 	Hand *Aux = Players;
 
@@ -272,7 +268,7 @@ Hand *insert_hand(Hand *Players, Hand *New){
 	return Players;
 }
 
-Piece *destroy(Piece *Pack){
+Piece *destroy(Piece *Pack){	//Apaga o pack
 
 	if(Pack == NULL){
 		return Pack;
@@ -282,7 +278,9 @@ Piece *destroy(Piece *Pack){
 	return NULL;
 }
 
-Piece *erase_pieces(Piece *Pack, int n){
+//Apaga as n primeiras peças do pack 
+//(quando se tira uma peça nova ou quando as peças sao distribuidas no começo do jogo)
+Piece *erase_pieces(Piece *Pack, int n){	
 
 	int i = 0;
 	Piece *Temp = Pack;
@@ -298,7 +296,7 @@ Piece *erase_pieces(Piece *Pack, int n){
 	return AuxHead;
 }
 
-Hand *hand_out(Piece *Pack, Hand *Player, int NPieces){
+Hand *hand_out(Piece *Pack, Hand *Player, int NPieces){	//Distribui NPieces do pack para uma mão
 
 	int i = 0;
 	Piece *Temp = Pack;
@@ -312,6 +310,9 @@ Hand *hand_out(Piece *Pack, Hand *Player, int NPieces){
 	return Player;
 }
 
+//Inicializa o jogo distribuindo as INITIAL_HAND_SIZE peças
+//para NofPlayers jogadores e retorna o tabuleiro
+//(o pack já deve ter sido criado e preferencialmente embaralhado)
 Board *init_game(Piece *Pack, int NofPlayers){
 
 	int i = 0;
@@ -321,15 +322,15 @@ Board *init_game(Piece *Pack, int NofPlayers){
 	while(i < NofPlayers){
 		AuxHand = init_hand();
 		AuxHand = hand_out(Pack, AuxHand, INITIAL_HAND_SIZE);
+		Pack = erase_pieces(Pack, INITIAL_HAND_SIZE);
 		NewBoard->h = insert_hand(NewBoard->h, AuxHand);
 		++i;
 	}
-	Pack = erase_pieces(Pack, NofPlayers * INITIAL_HAND_SIZE);
 	NewBoard->p = Pack;
 	return NewBoard;
 }
 
-Hand *show_hand(Hand *Player){
+Hand *show_hand(Hand *Player){	//Exibe uma mão
 
 	int i = 0;
 	Hand *Aux = Player;
@@ -343,20 +344,34 @@ Hand *show_hand(Hand *Player){
 
 int main (int argc, char *argv[]) {
 
-	/*Board *NewBoard = NULL;
+	int i = 0;
+	Board *NewBoard = NULL;
 	Piece *Pack = NULL;
+	Hand *Aux = NULL;
+
 	Pack = create_pack(Pack);
 	Pack = shuffle_pack(Pack, NUM_PIECES + NUM_JOKER);
+	
 	printf("\n\nInitial pack:\n\n");
 	Pack = show_pack(Pack);
 	NewBoard = init_game(Pack, 4);
+
+	Aux = NewBoard->h;
+	while(i < 4){
+		printf("\n\nHand %d:\n\n", i + 1);
+		Aux = show_hand(Aux);
+		++i;
+		Aux = Aux->next;
+	}
+
 	printf("\n\nPack after hand out (to 4 players):\n\n");
 	//AQUI DA PROBLEMA
 	Pack = show_pack(Pack);
+
 	printf("\n\nPack after hand out (to 4 players):\n\n");
 	//AQUI NAO DA, MAS TEORICAMENTE NAO DEVERIA SER A MESMA COISA??
 	Pack = show_pack(NewBoard->p);
-	*/
+	
 
 	return 0;
 }
