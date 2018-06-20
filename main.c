@@ -114,19 +114,26 @@ Piece *create_piece(const char *newcard, Color color){	//Cria uma peça nova rec
 	return New;
 }
 
-Piece *insert_piece(Piece *Pack, Piece *New){	//Insere uma peça nova no baralho (precisa estar inicializada)
 
-	Piece *Aux = Pack;
+/**
+ * @desc Insere na pilha uma nova peca
+ * @param $head - Endereco de memoria do inicio da pilha
+ *	  $New - Peca a ser adicionada na pilha
+*/
+
+void push_piece(Piece *head, Piece *New){	//Insere uma peça nova no baralho (precisa estar inicializada)
+
+	Piece *Aux = head;
 
 	if(Aux == NULL){
-		return New;
+		printf("O Pack precisa estar inicializado");
+		return;
 	}
 
 	while(Aux->next != NULL){
 		Aux = Aux->next;
 	}
 	Aux->next = New;
-	return Pack;
 }
 
 Piece *create_pack(Piece *Pack){	//Cria o baralho ordenado (1-D, !-@-#-$)
@@ -158,21 +165,21 @@ Piece *create_pack(Piece *Pack){	//Cria o baralho ordenado (1-D, !-@-#-$)
 				break;
 		}
 		Aux = create_piece(info, color);
-		Pack = insert_piece(Pack, Aux);
+		push_piece(Pack, Aux);
 		++i;
 	}
 	i = 0;
 	color = none;
 	while(i < NUM_JOKER){	//Insere os jokers com a cor "none"
 		Aux = create_piece("**", color);
-		Pack = insert_piece(Pack, Aux);
+		push_piece(Pack, Aux);
 		++i;
 	}
 
 	return Pack;
 }
 
-Piece *show_pack(Piece *Pack){	//Exibe o pack
+void *show_pack(Piece *Pack){	//Exibe o pack
 
 	Piece *Aux = Pack;
 
@@ -180,7 +187,6 @@ Piece *show_pack(Piece *Pack){	//Exibe o pack
 		printf("%s\n", Aux->info);
 		Aux = Aux->next;
 	}
-	return Pack;
 }
 
 Piece *switch_piece(Piece *Pack, int Posit1, int Posit2){	//Troca os dados de duas peças
@@ -280,20 +286,21 @@ Piece *destroy(Piece *Pack){	//Apaga o pack
 
 //Apaga as n primeiras peças do pack 
 //(quando se tira uma peça nova ou quando as peças sao distribuidas no começo do jogo)
-Piece *erase_pieces(Piece *Pack, int n){	
-
+void pop_piece(Piece *head, int n){
 	int i = 0;
-	Piece *Temp = Pack;
+	Piece *Temp = head;
 	Piece *AuxHead = NULL;
 	
-	while(i < n - 1){
-		Temp = Temp->next;
-		++i;
+	// Percorre n vezes ate o topo da pilha para remover n pecas do pack
+	for(i = 0; i < n; ++i) {
+		// Percorre ate o topo da pilha
+		while(Temp->next != NULL){
+			Temp = Temp->next;
+		}
+		free(Temp);	// Remove a peca no topo da pilha
+		Temp = head; // Volta para o head da pilha	
 	}
-	AuxHead = Temp->next;
-	Temp->next = NULL;
-	Pack = destroy(Pack);
-	return AuxHead;
+
 }
 
 Hand *hand_out(Piece *Pack, Hand *Player, int NPieces){	//Distribui NPieces do pack para uma mão
@@ -322,7 +329,7 @@ Board *init_game(Piece *Pack, int NofPlayers){
 	while(i < NofPlayers){
 		AuxHand = init_hand();
 		AuxHand = hand_out(Pack, AuxHand, INITIAL_HAND_SIZE);
-		Pack = erase_pieces(Pack, INITIAL_HAND_SIZE);
+		pop_piece(Pack, INITIAL_HAND_SIZE);
 		NewBoard->h = insert_hand(NewBoard->h, AuxHand);
 		++i;
 	}
@@ -330,7 +337,7 @@ Board *init_game(Piece *Pack, int NofPlayers){
 	return NewBoard;
 }
 
-Hand *show_hand(Hand *Player){	//Exibe uma mão
+void show_hand(Hand *Player){	//Exibe uma mão
 
 	int i = 0;
 	Hand *Aux = Player;
@@ -339,7 +346,6 @@ Hand *show_hand(Hand *Player){	//Exibe uma mão
 		printf("%s\n", Aux->piece[i]);
 		++i;
 	}
-	return Player;
 }
 
 int main (int argc, char *argv[]) {
@@ -348,6 +354,14 @@ int main (int argc, char *argv[]) {
 	Board *NewBoard = NULL;
 	Piece *Pack = NULL;
 	Hand *Aux = NULL;
+	
+	// Acho que aqui o certo eh seguir a ordem de inicializacao
+	// Primeiro tem que ser inicializado o Board
+	// Na funcao init_game tem que alocar memoria p o pack e para o hand
+	// A funcao create_pack precisa do Pack inicializado para funcionar
+	// Estava acontecndo leak de memoria pq tava sendo chamado create_pack antes
+	// Ainda nao mudei aqui, so alterei algumas funcoes
+	
 
 	Pack = create_pack(Pack);
 	Pack = shuffle_pack(Pack, NUM_PIECES + NUM_JOKER);
@@ -359,18 +373,18 @@ int main (int argc, char *argv[]) {
 	Aux = NewBoard->h;
 	while(i < 4){
 		printf("\n\nHand %d:\n\n", i + 1);
-		Aux = show_hand(Aux);
+		show_hand(Aux);
 		++i;
 		Aux = Aux->next;
 	}
 
 	printf("\n\nPack after hand out (to 4 players):\n\n");
 	//AQUI DA PROBLEMA
-	Pack = show_pack(Pack);
+	show_pack(Pack);
 
 	printf("\n\nPack after hand out (to 4 players):\n\n");
 	//AQUI NAO DA, MAS TEORICAMENTE NAO DEVERIA SER A MESMA COISA??
-	Pack = show_pack(NewBoard->p);
+	show_pack(NewBoard->p);
 	
 
 	return 0;
