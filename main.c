@@ -60,10 +60,6 @@ struct hand {
 
 struct piece {
 	Color color;	// Cor da peca
-<<<<<<< HEAD
-=======
-	unsigned piece_num; // Numero da peca
->>>>>>> b3006d16ade0af293e9254ccc98580b372822aaf
 	const char *info;	// Valor da peca (1 a D) com a cor
 	struct piece *next;	// Aponta para a proxima peca da pilha
 }; typedef struct piece Piece;
