@@ -134,7 +134,7 @@ void switch_piece(Piece *Pack, int Posit1, int Posit2){	//Troca os dados de duas
 	int i = 0;
 	Piece *Aux1 = Pack;
 	Piece *Aux2 = Pack;
-	const char *TempInfo = NULL;
+	char TempInfo[2];
 	Color TempColor = none;
 
 	while(i < Posit1){
@@ -147,7 +147,7 @@ void switch_piece(Piece *Pack, int Posit1, int Posit2){	//Troca os dados de duas
 		++i;
 	}
 
-	TempInfo = Aux1->info;
+	strcpy(TempInfo, Aux1->info);
 	strcpy(Aux1->info, Aux2->info);
 	strcpy(Aux2->info, TempInfo);
 	TempColor = Aux1->color;
