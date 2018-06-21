@@ -3,7 +3,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include "pack.h"
 #include "main.h"
+
 
 const char *blue_piece[] = {"1!", "2!", "3!", "4!",
 				"5!", "6!", "7!", "8!",
@@ -265,6 +267,7 @@ void show_hand(Hand *Player){	//Exibe uma mão
 		++i;
 	}
 }
+
 
 int main (int argc, char *argv[]) {
 
