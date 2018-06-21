@@ -1,6 +1,7 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
+#include "pack.h"
 
 #define NUM_PIECES 104
 #define NUM_COLOR 4
@@ -52,13 +53,6 @@ struct hand {
 }; typedef struct hand Hand;
 
 
-struct piece {
-	Color color;	// Cor da peca
-	char info[2];	// Valor da peca (1 a D) com a cor
-	struct piece *next;	// Aponta para a proxima peca da pilha
-}; typedef struct piece Piece;
-
-
 struct board {
 	Piece *p;	// Aponta para a pilha de pecas
 	Set *s;		// Aponta para a lista de sets formados no jogo
@@ -66,29 +60,10 @@ struct board {
 }; typedef struct board Board;
 
 
-Piece *create_piece(char *newcard, Color color);
-
-void push_piece(Piece *head, Piece *New);
-
-void create_pack(Piece *Pack);
-
-void show_pack(Piece *pack);
-
-void switch_piece(Piece *Pack, int Posit1, int Posit2);
-
-void shuffle_pack(Piece *Pack, int Len);
-
-
-Hand *init_hand();
-
 // Aloca e retorna board
 Board *init_board();
 
 void insert_hand(Hand *Players, Hand *New);
-
-Piece *destroy(Piece *Pack);
-
-void pop_piece(Piece *head, int n);
 
 Hand *hand_out(Piece *Pack, Hand *Player, int NPieces);
 
