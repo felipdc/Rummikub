@@ -93,22 +93,22 @@ int main (int argc, char *argv[]) {
 
 	NewBoard->p = create_pack(NewBoard->p);	// Insere todos os elementos na pilha de pecas
 
-	//shuffle_pack(NewBoard->p, NUM_PIECES + NUM_JOKER);	// Embaralha as pecas
+	// shuffle_pack(NewBoard->p, NUM_PIECES + NUM_JOKER);	// Embaralha as pecas
 
-	show_pack(NewBoard->p);	// Imprime na tela as pecas em ordem da pilha
+	// show_pack(NewBoard->p);	// Imprime na tela as pecas em ordem da pilha
 
 
 
-	// init_game(NewBoard, 4);
+	init_game(NewBoard, 4);
 
-	// Hand *Aux = NewBoard->h;
+	Hand *Aux = NewBoard->h;
 
-	// while(i < 4){
-	// 	printf("\n\nHand %d:\n\n", i + 1);
-	// 	show_hand(Aux);
-	// 	++i;
-	// 	Aux = Aux->next;
-	// }
+	while(i < 4){
+		printf("\n\nHand %d:\n\n", i + 1);
+		show_hand(Aux);
+		++i;
+		Aux = Aux->next;
+	}
 
 	// printf("\n\nPack after hand out (to 4 players):\n\n");
 	// //AQUI NAO DA, MAS TEORICAMENTE NAO DEVERIA SER A MESMA COISA??
