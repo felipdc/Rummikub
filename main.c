@@ -3,72 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
-
-
-#define NUM_PIECES 104
-#define NUM_COLOR 4
-
-/*
- * O número de peças em cada set é de até 13 peças, pois
- * nos sets do tipo run, o máximo de peças é 4, pois são somente
- * 4 cores; já no set tipo group, o máximo é 13, pois as peças vão de 1-13 
-*/
-
-#define NUM_COLOR_PIECES 13
-#define NUM_JOKER 2
-
-/**
- * O minimo de pecas para formar um set eh 3 pecas
- * Logo, o maximo de combinacoes eh 106/3 ~ 36
-*/
-
-#define MAX_SETS 36
-
-/**
- * Ha dois tipos de sets (combinacoes) no jogo:
- * O run (ex: 2! 3! 4!) - maximo de 26
- * O group (ex: 1! 1@ 1#) - maximo de 13
-*/
-
-#define MAX_RUN_SETS 26
-#define MAX_GROUP_SETS 26
-
-/**
- * No inicio do jogo, cada jogador recebe na sua mao 14 pecas
-*/ 
-
-#define INITIAL_HAND_SIZE 14
-
-
-typedef enum {blue, yellow, black, red, none} Color;	//none is joker's color
-
-
-struct set {
-	bool run;	// True se o set eh do tipo RUN, false caso tipo GROUP
-	Color color;	// Cor das pecas caso o set for do tipo GROUP
-	const char *set_piece[NUM_COLOR_PIECES];	// Guarda as pecas do set
-	struct set *next;	// Aponta para o proximo set formado no jogo
-}; typedef struct set Set;
-
-
-struct hand {
-	unsigned card_num; // Numero total de pecas na mao do jogador
-	const char *piece[NUM_PIECES];	// Pecas na mao do jogador
-	struct hand *next;	// Aponta para o proximo jogador no jogo	
-}; typedef struct hand Hand;
-
-
-struct piece {
-	Color color;	// Cor da peca
-	const char *info;	// Valor da peca (1 a D) com a cor
-	struct piece *next;	// Aponta para a proxima peca da pilha
-}; typedef struct piece Piece;
-
-struct board {
-	Piece *p;	// Aponta para a pilha de pecas
-	Set *s;		// Aponta para a lista de sets formados no jogo
-	Hand *h;	// Aponta para a lista de jogadores no jogo
-}; typedef struct board Board;
+#include "main.h"
 
 const char *blue_piece[] = {"1!", "2!", "3!", "4!",
 				"5!", "6!", "7!", "8!",
@@ -104,12 +39,11 @@ const char *red_piece[] = {"1$", "2$", "3$", "4$",
 
 const char *joker[] = {"**", "**"};
 
-Piece *create_piece(const char *newcard, Color color){	//Cria uma peça nova recebendo qual a peça (ex: 1!) e sua cor (ex: blue)
 
-	Piece *New = NULL;
-	New = (Piece *)malloc(sizeof(Piece));
+Piece *create_piece(char *newcard, Color color){	//Cria uma peça nova recebendo qual a peça (ex: 1!) e sua cor (ex: blue)
+	Piece *New = (Piece *)malloc(sizeof(Piece));
 	New->color = color;
-	New->info = newcard;
+	strcpy(New->info, newcard);
 	New->next = NULL;
 	return New;
 }
@@ -136,32 +70,31 @@ void push_piece(Piece *head, Piece *New){	//Insere uma peça nova no baralho (pr
 	Aux->next = New;
 }
 
-Piece *create_pack(Piece *Pack){	//Cria o baralho ordenado (1-D, !-@-#-$)
+void create_pack(Piece *Pack){	//Cria o baralho ordenado (1-D, !-@-#-$)
 
 	int i = 0, number_aux = 0;
 	Color color = none;
-	const char *info = NULL;
-	Piece *Aux = NULL;
+	char info[2];
+	Piece *Aux;
 
 	while(i < NUM_PIECES){	//Insere todas as peças com exceção dos jokers
 		number_aux = i / 4;	//Só aumenta uma unidade de 4 em 4
-
 		switch(i % 4){	//Muda a cor ciclicamente, visto que os restos possiveis pra 4 são somente (0,1,2,3)
 			case blue:	//blue !
 				color = blue;
-				info = blue_piece[number_aux];
+				strcpy(info, blue_piece[number_aux]);
 				break;
 			case yellow: //yellow @
 				color = yellow;
-				info = yellow_piece[number_aux];
+				strcpy(info, yellow_piece[number_aux]);
 				break;
 			case black: //black #
 				color = black;
-				info = black_piece[number_aux];
+				strcpy(info, black_piece[number_aux]);
 				break;
 			case red: //red $
 				color = red;
-				info = red_piece[number_aux];
+				strcpy(info, red_piece[number_aux]);
 				break;
 		}
 		Aux = create_piece(info, color);
@@ -175,11 +108,9 @@ Piece *create_pack(Piece *Pack){	//Cria o baralho ordenado (1-D, !-@-#-$)
 		push_piece(Pack, Aux);
 		++i;
 	}
-
-	return Pack;
 }
 
-void *show_pack(Piece *Pack){	//Exibe o pack
+void show_pack(Piece *Pack){	//Exibe o pack
 
 	Piece *Aux = Pack;
 
@@ -189,7 +120,7 @@ void *show_pack(Piece *Pack){	//Exibe o pack
 	}
 }
 
-Piece *switch_piece(Piece *Pack, int Posit1, int Posit2){	//Troca os dados de duas peças
+void switch_piece(Piece *Pack, int Posit1, int Posit2){	//Troca os dados de duas peças
 
 	int i = 0;
 	Piece *Aux1 = Pack;
@@ -208,15 +139,14 @@ Piece *switch_piece(Piece *Pack, int Posit1, int Posit2){	//Troca os dados de du
 	}
 
 	TempInfo = Aux1->info;
-	Aux1->info = Aux2->info;
-	Aux2->info = TempInfo;
+	strcpy(Aux1->info, Aux2->info);
+	strcpy(Aux2->info, TempInfo);
 	TempColor = Aux1->color;
 	Aux1->color = Aux2->color;
 	Aux2->color = TempColor;
-	return Pack;
 }
 
-Piece *shuffle_pack(Piece *Pack, int Len){	//Embaralha o pack (já tem que ter sido criado com a funcao create_pack)
+void shuffle_pack(Piece *Pack, int Len){	//Embaralha o pack (já tem que ter sido criado com a funcao create_pack)
 
 	int i = 0;
 	int n = 0;
@@ -228,24 +158,17 @@ Piece *shuffle_pack(Piece *Pack, int Len){	//Embaralha o pack (já tem que ter s
 		while(i == n){
 			n = rand() % Len;
 		}
-		Pack = switch_piece(Pack, i, n);
+		switch_piece(Pack, i, n);
 		++i;
 	}
-	return Pack;
 }
 
 Hand *init_hand(){	//Inicializa uma mão de um jogador
 
 	int i = 0;
-	Hand *New = NULL;
-	New = (Hand *)malloc(sizeof(Hand));
+	Hand *New = (Hand *)malloc(sizeof(Hand));
 	New->card_num = 0;
 	New->next = NULL;
-
-	while(i < NUM_PIECES){
-		New->piece[i] = NULL;
-		++i;
-	}
 	return New;
 }
 
@@ -259,20 +182,16 @@ Board *init_board(){	//Inicializa um tabuleiro novo
 	return NewBoard;
 }
 
-Hand *insert_hand(Hand *Players, Hand *New){	//Insere uma mão nova nas existentes
+void insert_hand(Hand *Players, Hand *New){	//Insere uma mão nova nas existentes
 
-	Hand *Aux = Players;
-
-	if(Aux == NULL){
-		return New;
-	}
+	Hand *Aux = Players;	
 
 	while(Aux->next != NULL){
 		Aux = Aux->next;
 	}
 	Aux->next = New;
-	return Players;
 }
+
 
 Piece *destroy(Piece *Pack){	//Apaga o pack
 
@@ -289,15 +208,15 @@ Piece *destroy(Piece *Pack){	//Apaga o pack
 void pop_piece(Piece *head, int n){
 	int i = 0;
 	Piece *Temp = head;
-	Piece *AuxHead = NULL;
-	
+
 	// Percorre n vezes ate o topo da pilha para remover n pecas do pack
 	for(i = 0; i < n; ++i) {
 		// Percorre ate o topo da pilha
-		while(Temp->next != NULL){
+		while(Temp->next->next != NULL){
 			Temp = Temp->next;
 		}
-		free(Temp);	// Remove a peca no topo da pilha
+		Temp->next = NULL;
+		free(Temp->next);
 		Temp = head; // Volta para o head da pilha	
 	}
 
@@ -309,32 +228,31 @@ Hand *hand_out(Piece *Pack, Hand *Player, int NPieces){	//Distribui NPieces do p
 	Piece *Temp = Pack;
 
 	while(i < NPieces){
-		Player->piece[i] = Temp->info;
+		strcpy(Player->piece[i], Temp->info);
+		//Player->piece[i] = Temp->info;
 		++i;
 		Temp = Temp->next;
 	}
 	Player->card_num = Player->card_num + NPieces;
+
 	return Player;
 }
 
 //Inicializa o jogo distribuindo as INITIAL_HAND_SIZE peças
 //para NofPlayers jogadores e retorna o tabuleiro
 //(o pack já deve ter sido criado e preferencialmente embaralhado)
-Board *init_game(Piece *Pack, int NofPlayers){
+Board *init_game(Board *board, int NofPlayers){
 
 	int i = 0;
-	Board *NewBoard = init_board();
 	Hand *AuxHand = NULL;
 
 	while(i < NofPlayers){
 		AuxHand = init_hand();
-		AuxHand = hand_out(Pack, AuxHand, INITIAL_HAND_SIZE);
-		pop_piece(Pack, INITIAL_HAND_SIZE);
-		NewBoard->h = insert_hand(NewBoard->h, AuxHand);
+		hand_out(board->p, AuxHand, INITIAL_HAND_SIZE); // Distribui peca para um jogador
+		pop_piece(board->p, INITIAL_HAND_SIZE);	// Tira a peca da pilha de pecas
+		//insert_hand(board->h, AuxHand);
 		++i;
 	}
-	NewBoard->p = Pack;
-	return NewBoard;
 }
 
 void show_hand(Hand *Player){	//Exibe uma mão
@@ -351,40 +269,33 @@ void show_hand(Hand *Player){	//Exibe uma mão
 int main (int argc, char *argv[]) {
 
 	int i = 0;
-	Board *NewBoard = NULL;
-	Piece *Pack = NULL;
-	Hand *Aux = NULL;
 	
-	// Acho que aqui o certo eh seguir a ordem de inicializacao
-	// Primeiro tem que ser inicializado o Board
-	// Na funcao init_game tem que alocar memoria p o pack e para o hand
-	// A funcao create_pack precisa do Pack inicializado para funcionar
-	// Estava acontecndo leak de memoria pq tava sendo chamado create_pack antes
-	// Ainda nao mudei aqui, so alterei algumas funcoes
-	
+	Board *NewBoard = init_board();	// Cria e aloca memoria para NewBoard
 
-	Pack = create_pack(Pack);
-	Pack = shuffle_pack(Pack, NUM_PIECES + NUM_JOKER);
-	
-	printf("\n\nInitial pack:\n\n");
-	Pack = show_pack(Pack);
-	NewBoard = init_game(Pack, 4);
+	NewBoard->p = malloc(sizeof(Piece));	// Aloca memoria para a pilha de pecas
 
-	Aux = NewBoard->h;
-	while(i < 4){
-		printf("\n\nHand %d:\n\n", i + 1);
-		show_hand(Aux);
-		++i;
-		Aux = Aux->next;
-	}
+	create_pack(NewBoard->p);	// Insere todos os elementos na pilha de pecas
 
-	printf("\n\nPack after hand out (to 4 players):\n\n");
-	//AQUI DA PROBLEMA
-	show_pack(Pack);
+	shuffle_pack(NewBoard->p, NUM_PIECES + NUM_JOKER);	// Embaralha as pecas
 
-	printf("\n\nPack after hand out (to 4 players):\n\n");
-	//AQUI NAO DA, MAS TEORICAMENTE NAO DEVERIA SER A MESMA COISA??
-	show_pack(NewBoard->p);
+	show_pack(NewBoard->p);	// Imprime na tela as pecas em ordem da pilha
+
+
+
+	// init_game(NewBoard, 4);
+
+	// Hand *Aux = NewBoard->h;
+
+	// while(i < 4){
+	// 	printf("\n\nHand %d:\n\n", i + 1);
+	// 	show_hand(Aux);
+	// 	++i;
+	// 	Aux = Aux->next;
+	// }
+
+	// printf("\n\nPack after hand out (to 4 players):\n\n");
+	// //AQUI NAO DA, MAS TEORICAMENTE NAO DEVERIA SER A MESMA COISA??
+	// show_pack(NewBoard->p);
 	
 
 	return 0;
