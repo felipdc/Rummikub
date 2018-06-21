@@ -62,23 +62,23 @@ Piece *create_piece(char *newcard, Color color){	//Cria uma peça nova recebendo
  *	  $New - Peca a ser adicionada na pilha
 */
 
-void push_piece(Piece *head, Piece *New){	//Insere uma peça nova no baralho (precisa estar inicializada)
+Piece *push_piece(Piece *head, Piece *New){	//Insere uma peça nova no baralho (precisa estar inicializada)
 
 	Piece *Aux = head;
 
 	if(Aux == NULL){
-		printf("O Pack precisa estar inicializado");
-		return;
+		return New;
 	}
 
 	while(Aux->next != NULL){
 		Aux = Aux->next;
 	}
 	Aux->next = New;
+	return head;
 }
 
 
-void create_pack(Piece *Pack){	//Cria o baralho ordenado (1-D, !-@-#-$)
+Piece *create_pack(Piece *Pack){	//Cria o baralho ordenado (1-D, !-@-#-$)
 
 	int i = 0, number_aux = 0;
 	Color color = none;
@@ -106,16 +106,17 @@ void create_pack(Piece *Pack){	//Cria o baralho ordenado (1-D, !-@-#-$)
 				break;
 		}
 		Aux = create_piece(info, color);
-		push_piece(Pack, Aux);
+		Pack = push_piece(Pack, Aux);
 		++i;
 	}
 	i = 0;
 	color = none;
 	while(i < NUM_JOKER){	//Insere os jokers com a cor "none"
 		Aux = create_piece("**", color);
-		push_piece(Pack, Aux);
+		Pack = push_piece(Pack, Aux);
 		++i;
 	}
+	return Pack;
 }
 
 void show_pack(Piece *Pack){	//Exibe o pack
@@ -189,6 +190,7 @@ Piece *destroy(Piece *Pack){	//Apaga o pack
 void pop_piece(Piece *head, int n){
 	int i = 0;
 	Piece *Temp = head;
+	Piece *Aux = head;
 
 	// Percorre n vezes ate o topo da pilha para remover n pecas do pack
 	for(i = 0; i < n; ++i) {
@@ -196,8 +198,9 @@ void pop_piece(Piece *head, int n){
 		while(Temp->next->next != NULL){
 			Temp = Temp->next;
 		}
+		Aux = Temp->next->next;
 		Temp->next = NULL;
-		free(Temp->next);
+		free(Aux);
 		Temp = head; // Volta para o head da pilha	
 	}
 

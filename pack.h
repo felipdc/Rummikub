@@ -14,8 +14,8 @@ struct piece {
 
 Piece *create_piece(char *newcard, Color color);
 Piece *destroy(Piece *Pack);
-void push_piece(Piece *head, Piece *New);
-void create_pack(Piece *Pack);
+Piece *push_piece(Piece *head, Piece *New);
+Piece *create_pack(Piece *Pack);
 void show_pack(Piece *pack);
 void switch_piece(Piece *Pack, int Posit1, int Posit2);
 void shuffle_pack(Piece *Pack, int Len);

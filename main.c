@@ -89,11 +89,11 @@ int main (int argc, char *argv[]) {
 	
 	Board *NewBoard = init_board();	// Cria e aloca memoria para NewBoard
 
-	NewBoard->p = malloc(sizeof(Piece));	// Aloca memoria para a pilha de pecas
+	//NewBoard->p = malloc(sizeof(Piece));	// Aloca memoria para a pilha de pecas
 
-	create_pack(NewBoard->p);	// Insere todos os elementos na pilha de pecas
+	NewBoard->p = create_pack(NewBoard->p);	// Insere todos os elementos na pilha de pecas
 
-	shuffle_pack(NewBoard->p, NUM_PIECES + NUM_JOKER);	// Embaralha as pecas
+	//shuffle_pack(NewBoard->p, NUM_PIECES + NUM_JOKER);	// Embaralha as pecas
 
 	show_pack(NewBoard->p);	// Imprime na tela as pecas em ordem da pilha
 
