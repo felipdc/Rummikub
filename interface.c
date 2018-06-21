@@ -27,22 +27,6 @@ int intInput() {                                        // Recebe um input com f
     return number;
 }
 
-float floatInput() {                                    // Similar a função intInput(), porém
-    float number;                                       // validando um float
-    char inputString[127];
-    char *endBuff;
-    fgets(inputString, 127, stdin);
-    removeNL(inputString);
-    number = strtod(inputString, &endBuff);
-    while (*endBuff != '\0'){
-        printf("Por favor digite um numero valido: ");
-        fgets(inputString, 127, stdin);
-        removeNL(inputString);
-        number = strtod(inputString, &endBuff);
-    }
-    return number;
-}
-
 // Splash Screen
 // Retorna o numero de jogadores
 // Em construção
@@ -50,5 +34,7 @@ float floatInput() {                                    // Similar a função in
 int startMenu() {
     printf("RUMMIKUB\n\n");
     printf("Quantas pessoas irao jogar? ");
+
+    int numOfPlayers = intInput();
 
 }
