@@ -37,4 +37,25 @@ int startMenu() {
 
     int numOfPlayers = intInput();
 
+    
+    return numOfPlayers;
+}
+
+// Mostra as mãos de todos os jogadores
+
+void showAllHands(int NofPlayers) {
+    char *hand[] = {"##", "##", "##", "##", "##", "##"};
+    
+    for (int i = 0; i < NofPlayers; i++){
+        printf("Player %d\t", i+1);
+    }
+    printf("\n");
+    for (int i = 0; i < NofPlayers; i++){
+        printf("[");
+        int j = 0;
+        while (hand[j] == "##"){
+            printf("%s", hand[j]);
+        }
+        printf("]");
+    }
 }

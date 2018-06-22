@@ -103,13 +103,13 @@ int main (int argc, char *argv[]) {
 
 	Hand *Aux = NewBoard->h;
 
-	while(i < 4){
-		printf("\n\nHand %d:\n\n", i + 1);
-		show_hand(Aux);
-		++i;
-		Aux = Aux->next;
-	}
-
+	// while(i < 4){
+	// 	printf("\n\nHand %d:\n\n", i + 1);
+	// 	show_hand(Aux);
+	// 	++i;
+	// 	Aux = Aux->next;
+	// }
+	
 	// printf("\n\nPack after hand out (to 4 players):\n\n");
 	// //AQUI NAO DA, MAS TEORICAMENTE NAO DEVERIA SER A MESMA COISA??
 	// show_pack(NewBoard->p);

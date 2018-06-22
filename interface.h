@@ -5,7 +5,5 @@ void removeNL(char *input);
 int intInput();
 float floatInput();
 int startMenu();
-
-}
-
+void showAllHands(int NofPlayers);
 #ifdef
