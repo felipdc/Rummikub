@@ -15,11 +15,10 @@ struct piece {
 Piece *create_piece(char *newcard, Color color);
 Piece *destroy(Piece *Pack);
 Piece *push_piece(Piece *head, Piece *New);
+Piece *pop_piece(Piece *head, int n);
 Piece *create_pack(Piece *Pack);
 void show_pack(Piece *pack);
 void switch_piece(Piece *Pack, int Posit1, int Posit2);
 void shuffle_pack(Piece *Pack, int Len);
-void pop_piece(Piece *head, int n);
-
 
 #endif // PACK_H_

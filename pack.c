@@ -187,23 +187,19 @@ Piece *destroy(Piece *Pack){	//Apaga o pack
 
 //Apaga as n primeiras peças do pack 
 //(quando se tira uma peça nova ou quando as peças sao distribuidas no começo do jogo)
-void pop_piece(Piece *head, int n){
+Piece *pop_piece(Piece *head, int n){
 	int i = 0;
 	Piece *Temp = head;
 	Piece *Aux = head;
 
-	// Percorre n vezes ate o topo da pilha para remover n pecas do pack
-	for(i = 0; i < n; ++i) {
-		// Percorre ate o topo da pilha
-		while(Temp->next->next != NULL){
-			Temp = Temp->next;
-		}
-		Aux = Temp->next->next;
-		Temp->next = NULL;
-		free(Aux);
-		Temp = head; // Volta para o head da pilha	
+	while(i < n - 1){
+		Temp = Temp->next;
+		++i;
 	}
-
+	Aux = Temp->next;
+	Temp->next = NULL;
+	head = destroy(head);
+	return Aux;
 }
 
 

@@ -41,7 +41,7 @@
 struct set {
 	bool run;	// True se o set eh do tipo RUN, false caso tipo GROUP
 	Color color;	// Cor das pecas caso o set for do tipo GROUP
-	const char *set_piece[NUM_COLOR_PIECES];	// Guarda as pecas do set
+	char *set_piece[NUM_COLOR_PIECES];	// Guarda as pecas do set
 	struct set *next;	// Aponta para o proximo set formado no jogo
 }; typedef struct set Set;
 
@@ -63,7 +63,7 @@ struct board {
 // Aloca e retorna board
 Board *init_board();
 
-void insert_hand(Hand *Players, Hand *New);
+Hand *insert_hand(Hand *Players, Hand *New);
 
 Hand *hand_out(Piece *Pack, Hand *Player, int NPieces);
 

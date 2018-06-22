@@ -11,6 +11,11 @@ Hand *init_hand(){	//Inicializa uma mão de um jogador
 
 	int i = 0;
 	Hand *New = (Hand *)malloc(sizeof(Hand));
+	while(i < NUM_PIECES){
+		New->piece[i][0] = '0';
+		New->piece[i][1] = '0';
+		++i;
+	}
 	New->card_num = 0;
 	New->next = NULL;
 	return New;
@@ -27,14 +32,19 @@ Board *init_board(){	//Inicializa um tabuleiro novo
 	return NewBoard;
 }
 
-void insert_hand(Hand *Players, Hand *New){	//Insere uma mão nova nas existentes
+Hand *insert_hand(Hand *Players, Hand *New){	//Insere uma mão nova nas existentes
 
-	Hand *Aux = Players;	
+	Hand *Aux = Players;
+
+	if(Aux == NULL){
+		return New;
+	}
 
 	while(Aux->next != NULL){
 		Aux = Aux->next;
 	}
 	Aux->next = New;
+	return Players;
 }
 
 
@@ -61,14 +71,17 @@ Board *init_game(Board *board, int NofPlayers){
 
 	int i = 0;
 	Hand *AuxHand = NULL;
+	board->p = create_pack(board->p);	// Insere todos os elementos na pilha de pecas
+	shuffle_pack(board->p, NUM_PIECES + NUM_JOKER);	// Embaralha as pecas
 
 	while(i < NofPlayers){
 		AuxHand = init_hand();
-		hand_out(board->p, AuxHand, INITIAL_HAND_SIZE); // Distribui peca para um jogador
-		pop_piece(board->p, INITIAL_HAND_SIZE);	// Tira a peca da pilha de pecas
-		//insert_hand(board->h, AuxHand);
+		AuxHand = hand_out(board->p, AuxHand, INITIAL_HAND_SIZE); // Distribui peca para um jogador
+		board->p = pop_piece(board->p, INITIAL_HAND_SIZE);	// Tira a peca da pilha de pecas
+		board->h = insert_hand(board->h, AuxHand);
 		++i;
 	}
+	return board;
 }
 
 void show_hand(Hand *Player){	//Exibe uma mão
@@ -76,8 +89,8 @@ void show_hand(Hand *Player){	//Exibe uma mão
 	int i = 0;
 	Hand *Aux = Player;
 
-	while(Aux->piece[i] != NULL){
-		printf("%s\n", Aux->piece[i]);
+	while(i < Aux->card_num){
+		printf("%c%c\n", Aux->piece[i][0], Aux->piece[i][1]);
 		++i;
 	}
 }
@@ -89,30 +102,19 @@ int main (int argc, char *argv[]) {
 	
 	Board *NewBoard = init_board();	// Cria e aloca memoria para NewBoard
 
-	//NewBoard->p = malloc(sizeof(Piece));	// Aloca memoria para a pilha de pecas
+	NewBoard = init_game(NewBoard, 4);
 
-	NewBoard->p = create_pack(NewBoard->p);	// Insere todos os elementos na pilha de pecas
+	Hand *Aux = NewBoard->h;
 
-	//shuffle_pack(NewBoard->p, NUM_PIECES + NUM_JOKER);	// Embaralha as pecas
-
-	show_pack(NewBoard->p);	// Imprime na tela as pecas em ordem da pilha
-
-
-
-	// init_game(NewBoard, 4);
-
-	// Hand *Aux = NewBoard->h;
-
-	// while(i < 4){
-	// 	printf("\n\nHand %d:\n\n", i + 1);
-	// 	show_hand(Aux);
-	// 	++i;
-	// 	Aux = Aux->next;
-	// }
-
-	// printf("\n\nPack after hand out (to 4 players):\n\n");
-	// //AQUI NAO DA, MAS TEORICAMENTE NAO DEVERIA SER A MESMA COISA??
-	// show_pack(NewBoard->p);
+	while(i < 4){
+		printf("\n\nHand %d:\n\n", i + 1);
+	 	show_hand(Aux);
+		++i;
+	 	Aux = Aux->next;
+	}
+	
+	printf("\n\nPack after hand out (to 4 players):\n\n");
+	show_pack(NewBoard->p);
 	
 
 	return 0;
