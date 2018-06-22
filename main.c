@@ -5,6 +5,7 @@
 #include <time.h>
 #include "pack.h"
 #include "main.h"
+#include "interface.h"
 
 
 Hand *init_hand(){	//Inicializa uma mão de um jogador
@@ -102,6 +103,16 @@ int main (int argc, char *argv[]) {
 	init_game(NewBoard, 4);
 
 	Hand *Aux = NewBoard->h;
+
+	// Testes do Dezan
+	int numOfPlayers = startMenu();
+	printf("\n");
+	int activePlayer = 3; // placeholder
+
+	showAllHands(numOfPlayers, activePlayer);
+	// Fim dos testes
+
+	
 
 	// while(i < 4){
 	// 	printf("\n\nHand %d:\n\n", i + 1);
