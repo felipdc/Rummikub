@@ -9,6 +9,9 @@
 
 
 static unsigned get_piece_number (char piece[]) {
+    if (piece[0] == '*') {
+        return 99;  // Retorna 99 caso a peca seja um coringa
+    }
     return strtol (piece, NULL, 16);
 }
 
@@ -19,6 +22,11 @@ static Color get_piece_color (char piece[]) {
     if (piece[1] == '#') return black;
     if (piece[1] == '$') return red;
     if (piece[1] == '*') return none;
+}
+
+
+unsigned cmpfunc (const void * a, const void * b) {
+       return ( *(unsigned*)a - *(unsigned*)b  );
 }
 
 
@@ -100,8 +108,47 @@ bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
     }
     
     // Terceiro teste: Se o set for do tipo run, as pecas devem ser uma sequencia
-    // TODO
-   
+    // 1 - Cria um array com os numeros das pecas (exceto o coringa)
+    // 2 - Ordena o array
+    // 3 - Verifica quantos coringas ha no set
+    // 4 - Verifica se (X[i+1] - X[i] == 1). Se for 2, checa se ha um coringa no set
+    // 5 - Verifica se ha coringas suficientes
+
+    // 1.
+    unsigned pieces_num[num_of_pieces];
+    for (int i = 0; i < num_of_pieces; ++i) {
+        pieces_num[i] = get_piece_number(pieces[i]);
+    }
+    
+    // 2.
+    qsort (pieces_num, num_of_pieces, sizeof(unsigned), cmpfunc);
+
+    // 3.
+    unsigned joker_num = 0;
+    for (int i = 0; i < num_of_pieces; ++i) {
+        if (pieces_num[i] == 99) ++joker_num;
+    }
+
+    // 4.
+    unsigned non_consecutive_num = 0;   // Conta quantas vezes sera necessario um coringa
+    for (int i = 0; i < num_of_pieces - joker_num - 1; ++i) {
+        if (pieces_num[i+1] - pieces_num[i] == 1) {
+            continue;
+        }
+        if (pieces_num[i+1] - pieces_num[i] == 2) {
+            ++non_consecutive_num;
+        }
+        if (pieces_num[i+1] - pieces_num[i] == 3) {
+            non_consecutive_num += 2;
+        }
+        else {
+            printf ("Pecas nao estao em sequencia!\n");
+            return false;
+        }
+    }
+
+    // 5.
+    if (non_consecutive_num > joker_num) return false;
 
     // Quarto teste: Se o set for do tipo group, as pecas devem ter a mesmo numero
     if (is_run == false) {
