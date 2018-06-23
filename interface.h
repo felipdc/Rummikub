@@ -11,7 +11,7 @@ void removeNL(char *input);
 int intInput();
 float floatInput();
 int startMenu();
-void showHand(int playerNumber, bool isTurn);
-void showAllHands(int numOfPlayers, int activePlayer);
+void showHand(Hand *Player, int playerNumber, bool isTurn);
+void showAllHands(Hand* Player, int numOfPlayers, int activePlayer);
 
 #endif

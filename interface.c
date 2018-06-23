@@ -41,6 +41,12 @@ int startMenu() {
     printf("Quantas pessoas irao jogar? ");
 
     int numOfPlayers = intInput();
+    while (numOfPlayers > 4 || numOfPlayers < 2){
+        printf("\nO jogo e para 2 a 4 pessoas.\nQuantas pessoas irao jogar? ");
+        numOfPlayers = intInput();
+    }
+
+    
 
     
     return numOfPlayers;
@@ -50,28 +56,23 @@ int startMenu() {
 // Recebe o numero do jogador, quantas cartas ele tem na mão, e se é a vez dele
 // Ex.: Jogador 2, com 6 cartas e não é seu tuno = showHand(2, 6, false)
 
-void showHand(int playerNumber, bool isTurn) {
-    // Valores placeholder
-    char *hand[] = {"##", "##", "##", "##", "##", "##", "##"};
-    int numOfCards = 6; // Provavelmente será obtida analisando a mão do jogador (a mão provavelmente entrará como parâmetro ao invès de playerNumber)
-
-    // Estava tentando fazer uns testes com gotoxy, mas tava dando problema com a conio.h 
-
-    // int x = (playerNumber-1) * numOfCards*4;
-    // int y = -2;
-    // gotoxy(x,y);
+void showHand(Hand *Player, int playerNumber, bool isTurn) {
     
     if (isTurn){
         printf(" -> [PLAYER %d]", playerNumber);
     } else {
-        printf("player %d", playerNumber);
+        printf("[Player %d]", playerNumber);
     }
 
+    int i = 0;
     printf("\n[");
-    for (int i = 0; i < numOfCards; i++){
-        printf("%s, ", hand[i]);
-    }
-    printf("%s]\n\n", hand[numOfCards]);;
+	Hand *Aux = Player;
+
+	while(i < Aux->card_num-1){
+		printf("%c%c, ", Aux->piece[i][0], Aux->piece[i][1]);
+		++i;
+	}
+    printf("%c%c]\n\n", Aux->piece[i][0], Aux->piece[i][1]);
 }
 
 
@@ -79,12 +80,16 @@ void showHand(int playerNumber, bool isTurn) {
 // Recebe o numero de jogadores total e o jogador que deve jogar
 // Ex.: 5 jogadores, vez do Jogador 3 = showAllHands(5, 3);
 
-void showAllHands(int numOfPlayers, int activePlayer){
-    for (int i = 1; i <= numOfPlayers; i++) {
-        if (i == activePlayer) {
-            showHand(i, true);
+void showAllHands(Hand* Player, int numOfPlayers, int activePlayer){
+    int i = 1;
+    Hand *Aux = Player;
+    while(i <= numOfPlayers){
+        if(i == activePlayer) {
+            showHand(Aux, i, true);
         } else {
-            showHand(i, false);
+            showHand(Aux, i, false);
         }
-    }
+		++i;
+	 	Aux = Aux->next;
+	}
 }

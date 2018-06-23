@@ -103,26 +103,28 @@ int main (int argc, char *argv[]) {
 	
 	Board *NewBoard = init_board();	// Cria e aloca memoria para NewBoard
 
-	NewBoard = init_game(NewBoard, 4);
+	int numOfPlayers = startMenu(); // Splash screen do jogo, retorna o numero de jogadores
+	printf("\n");
+
+	NewBoard = init_game(NewBoard, numOfPlayers);
 
 	Hand *Aux = NewBoard->h;
 
-	while(i < 4){
-		printf("\n\nHand %d:\n\n", i + 1);
-	 	show_hand(Aux);
-		++i;
-	 	Aux = Aux->next;
-	}
+	// while(i < numOfPlayers){
+	// 	printf("\n\nHand %d:\n\n", i + 1);
+	//  	show_hand(Aux);
+	// 	++i;
+	//  	Aux = Aux->next;
+	// }
 	
-	printf("\n\nPack after hand out (to 4 players):\n\n");
-	show_pack(NewBoard->p);
+	// printf("\n\nPack after hand out:\n\n");
+	// show_pack(NewBoard->p);
 
 	// Testes do Dezan
-	int numOfPlayers = startMenu();
-	printf("\n");
-	int activePlayer = 3; // placeholder
-
-	showAllHands(numOfPlayers, activePlayer);
+	
+	Aux = NewBoard->h;
+	showAllHands(Aux, numOfPlayers, 3);
+	//showAllHands(numOfPlayers, activePlayer);
 	// Fim dos testes
 
 	return 0;
