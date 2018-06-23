@@ -6,7 +6,7 @@
 struct set {
 	bool run;   // True se o set eh do tipo RUN, false caso tipo GROUP
 	unsigned set_idx;   // Index do set para facil visualizacao
-	Color color;	// Cor das pecas caso o set for do tipo GROUP
+    unsigned num_of_pieces;
 	char set_piece[MAX_SET_PIECES][2];	// Guarda as pecas do set
 	struct set *next;	// Aponta para o proximo set formado no jogo
 }; typedef struct set Set;
@@ -68,5 +68,13 @@ bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces);
  */
 
 bool insert_set_possible (Set *dest_set, bool is_run, char *pieces[], unsigned num_of_pieces);
+
+/**
+ *  @desc Imprime na tela os sets do jogo
+ *  @param Set *set - Primeiro set da lista
+ */
+
+void show_set (Set *set);
+
 
 #endif // SET_H_    
