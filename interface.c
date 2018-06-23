@@ -41,8 +41,8 @@ int startMenu() {
     printf("Quantas pessoas irao jogar? ");
 
     int numOfPlayers = intInput();
-    while (numOfPlayers > 4 || numOfPlayers < 2){
-        printf("\nO jogo e para 2 a 4 pessoas.\nQuantas pessoas irao jogar? ");
+    while (numOfPlayers > 5 || numOfPlayers < 1){
+        printf("\nO jogo e para 1 a 5 pessoas.\nQuantas pessoas irao jogar? ");
         numOfPlayers = intInput();
     }
 
@@ -92,4 +92,19 @@ void showAllHands(Hand* Player, int numOfPlayers, int activePlayer){
 		++i;
 	 	Aux = Aux->next;
 	}
+}
+
+// Função pra checar se ta passando a vez do jogador
+// Apenas um teste
+
+void playerSwitcher(Hand* Player, int numOfTurns, int numOfPlayers){
+    Hand *Aux = Player;
+    int i = 0;
+    while(i < numOfTurns){
+        system(CLEAR);
+        showAllHands(Aux, numOfPlayers, (i%numOfPlayers)+1);
+        i++;
+        printf("\nPressione ENTER pra passar de turno (TESTE)\n");
+        getchar();
+    }
 }

@@ -120,11 +120,12 @@ int main (int argc, char *argv[]) {
 	// printf("\n\nPack after hand out:\n\n");
 	// show_pack(NewBoard->p);
 
+	
+
 	// Testes do Dezan
 	
 	Aux = NewBoard->h;
-	showAllHands(Aux, numOfPlayers, 3);
-	//showAllHands(numOfPlayers, activePlayer);
+	playerSwitcher(Aux, 20, numOfPlayers);
 	// Fim dos testes
 
 	return 0;
