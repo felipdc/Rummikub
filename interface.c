@@ -102,8 +102,12 @@ void playerSwitcher(Hand* Player, int numOfTurns, int numOfPlayers){
     int i = 0;
     while(i < numOfTurns){
         system(CLEAR);
+        printf("=========================================================");
+        printf("\n\n\n\n\n\tOS SETS FICARIAM AQUI, PROVAVELMENTE\n\n\n\n\n");
+        printf("=========================================================\n\n");
         showAllHands(Aux, numOfPlayers, (i%numOfPlayers)+1);
         i++;
+        printf("=========================================================\n");
         printf("\nPressione ENTER pra passar de turno (TESTE)\n");
         getchar();
     }
