@@ -8,6 +8,20 @@
 #include "interface.h"
 
 
+static unsigned get_piece_number (char piece[]) {
+    return strtol (piece, NULL, 16);
+}
+
+
+static Color get_piece_color (char piece[]) {
+    if (piece[1] == '!') return blue;
+    if (piece[1] == '@') return yellow;
+    if (piece[1] == '#') return black;
+    if (piece[1] == '$') return red;
+    if (piece[1] == '*') return none;
+}
+
+
 void new_set (Set *set, Hand *Player, bool is_run, char *pieces[], unsigned num_of_pieces) {
     
     Set *aux_set = set;
@@ -84,10 +98,19 @@ bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
             }
         } 
     }
-
-    // Terceiro test: Se o set for do tipo run, as pecas devem ser uma sequencia
+    
+    // Terceiro teste: Se o set for do tipo run, as pecas devem ser uma sequencia
     // TODO
-    
-    
+   
+
+    // Quarto teste: Se o set for do tipo group, as pecas devem ter a mesmo numero
+    if (is_run == false) {
+        for (int i = 0; i < num_of_pieces; ++i) {
+            for (int j = i; j < num_of_pieces; ++j) {
+                // Retorna falso caso haja pecas de numeros diferentes
+                if (piece[i][0] != piece[j][0]) return false;
+            }
+        }
+    }
 
 }
