@@ -37,12 +37,16 @@ int intInput() {                                        // Recebe um input com f
 
 int startMenu() {
     system(CLEAR);
-    printf("RUMMIKUB\n\n");
-    printf("Quantas pessoas irao jogar? ");
+    printf("\n\n\t##################\n");
+    printf(    "\t#                #\n");
+    printf(    "\t#    RUMMIKUB    #\n");
+    printf(    "\t#                #\n");
+    printf(    "\t##################\n\n");
+    printf("  Quantas pessoas irao jogar? ");
 
     int numOfPlayers = intInput();
     while (numOfPlayers > 5 || numOfPlayers < 1){
-        printf("\nO jogo e para 1 a 5 pessoas.\nQuantas pessoas irao jogar? ");
+        printf("\n  O jogo e para 1 a 5 pessoas.\n\n  Quantas pessoas irao jogar? ");
         numOfPlayers = intInput();
     }
 
@@ -106,9 +110,32 @@ void playerSwitcher(Hand* Player, int numOfTurns, int numOfPlayers){
         printf("\n\n\n\n\n\tOS SETS FICARIAM AQUI, PROVAVELMENTE\n\n\n\n\n");
         printf("=========================================================\n\n");
         showAllHands(Aux, numOfPlayers, (i%numOfPlayers)+1);
-        i++;
         printf("=========================================================\n");
-        printf("\nPressione ENTER pra passar de turno (TESTE)\n");
+        printf("\nPressione ENTER pra passar de turno (%d/%d) (TESTE)\n", i+1, numOfTurns);
+        i++;
+        getchar();
+    }
+}
+
+// Versão alternartiva da playerSwitcher que mostra apenas o jogador que está jogando
+
+void playerSwitcherAlt(Hand* Player, int numOfTurns, int numOfPlayers){
+    Hand *Aux = Player;
+    int i = 0;
+    while(i < numOfTurns){
+        system(CLEAR);
+        printf("=========================================================");
+        printf("\n\n\n\n\n\tOS SETS FICARIAM AQUI, PROVAVELMENTE\n\n\n\n\n");
+        printf("=========================================================\n\n");
+        showHand(Aux, (i%numOfPlayers)+1, false);
+        printf("=========================================================\n");
+        printf("\nPressione ENTER pra passar de turno (%d/%d) (TESTE)\n", i+1, numOfTurns);
+        i++;
+        if(i % numOfPlayers == 0){
+            Aux = Player;
+        } else {
+            Aux = Aux->next;
+        }
         getchar();
     }
 }

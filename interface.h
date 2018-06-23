@@ -14,5 +14,6 @@ int startMenu();
 void showHand(Hand *Player, int playerNumber, bool isTurn);
 void showAllHands(Hand* Player, int numOfPlayers, int activePlayer);
 void playerSwitcher(Hand* Player, int numOfTurns, int numOfPlayers);
+void playerSwitcherAlt(Hand* Player, int numOfTurns, int numOfPlayers);
 
 #endif
