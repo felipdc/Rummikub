@@ -55,7 +55,7 @@ void new_set (Set *set, Hand *Player, bool is_run, char *pieces[], unsigned num_
     } // Else
     
     // Avanca ate a ultima lista de set
-    while (aux_set->next == NULL) {
+    while (aux_set->next != NULL) {	//Aqui tava aux_set->next == NULL, mas é aux_set->next != NULL
         aux_set = aux_set->next;
     }
 
