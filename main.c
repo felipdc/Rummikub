@@ -96,6 +96,19 @@ void show_hand(Hand *Player){	//Exibe uma mão
 	}
 }
 
+void victory(Board *board){
+
+	int i = 0;
+	Hand *AuxHand = board->h;
+
+	while(AuxHand != NULL){
+		if(AuxHand->card_num == 0){
+			printf("O vencedor é o jogador %d.\n", i + 1);
+		}
+		++i;
+		AuxHand = AuxHand->next;
+	}
+}
 
 int main (int argc, char *argv[]) {
 
