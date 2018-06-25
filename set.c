@@ -7,6 +7,16 @@
 #include "set.h"
 #include "interface.h"
 
+Set *init_set(bool is_run, unsigned idx, unsigned num_pieces){	//Inicializa um set novo
+
+	Set *new_set = NULL;
+	new_set = (Set *)malloc(sizeof(Set));
+	new_set->run = is_run;
+	new_set->set_idx = idx;
+	new_set->num_of_pieces = num_pieces;
+	new_set->next = NULL;
+	return new_set;
+}
 
 static unsigned get_piece_number (char piece[]) {
     if (piece[0] == '*') {
@@ -33,6 +43,7 @@ unsigned cmpfunc (const void * a, const void * b) {
 void new_set (Set *set, Hand *Player, bool is_run, char *pieces[], unsigned num_of_pieces) {
     
     Set *aux_set = set;
+    int i = 0;
 
     if (is_new_set_possible (is_run, pieces, num_of_pieces) == false) {
         printf ("Jogada invalida");
@@ -41,30 +52,30 @@ void new_set (Set *set, Hand *Player, bool is_run, char *pieces[], unsigned num_
 
     // Verifica se eh o primeiro set do jogo
     if (set == NULL) {
-        aux_set = malloc (sizeof(Set));
-        aux_set->run = is_run;
-        aux_set->num_of_pieces = num_of_pieces;
-        aux_set->next = NULL;
+        aux_set = init_set(is_run, 0, num_of_pieces);	//Como é o primeiro, o index é zero
 
         // Insere as novas pecas
-        for (int i = 0; i < num_of_pieces; ++i) {
+        for (i = 0; i < num_of_pieces; ++i) {
             aux_set->set_piece[i][0] = pieces[i][0];
             aux_set->set_piece[i][1] = pieces[i][1];
         }
+        set = aux_set;	//Aqui o aux_set passa a ser o head dos sets, pois é o primeiro
         return;
     } // Else
     
     // Avanca ate a ultima lista de set
+    i = 1;	//Será o index do set
     while (aux_set->next != NULL) {	//Aqui tava aux_set->next == NULL, mas é aux_set->next != NULL
         aux_set = aux_set->next;
+        ++i;
     }
 
     // Aloca memoria para um novo set
-    aux_set->next = malloc (sizeof(Set));
+    aux_set->next = init_set(is_run, i, num_of_pieces);
     aux_set = aux_set->next;    // Muda para o novo set
 
     // Insere as pecas no set
-    for (int i = 0; i < num_of_pieces; ++i) {
+    for (i = 0; i < num_of_pieces; ++i) {
         aux_set->set_piece[i][0] = pieces[i][0];
         aux_set->set_piece[i][1] = pieces[i][1];
     }
@@ -74,7 +85,7 @@ void new_set (Set *set, Hand *Player, bool is_run, char *pieces[], unsigned num_
 void insert_in_set (Set *dest_set, Hand *Player, char *pieces[], unsigned num_of_pieces) {
     
     if (insert_set_possible (dest_set, is_run, pieces, num_of_pieces) == false) {
-        printf ("Jogada invaliida");
+        printf ("Jogada invalida");
         return;
     }
 
