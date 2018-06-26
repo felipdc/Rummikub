@@ -21,7 +21,7 @@ struct set {
  *	  unsigned num_of_pieces - Numero de pecas a colocar no set
  */
 
-void new_set (Set *set, Hand *Player, bool is_run, char *pieces[2], unsigned num_of_pieces);
+void new_set (Set *set, bool is_run, char *pieces[2], unsigned num_of_pieces);
 
 
 /**
@@ -32,7 +32,7 @@ void new_set (Set *set, Hand *Player, bool is_run, char *pieces[2], unsigned num
  *	  unsigned num_of_pieces - Numero de pecas a colocar no set
  */
 
-void insert_in_set (Set *dest_set, Hand *Player, char *pieces[], unsigned num_of_pieces);
+void insert_in_set (Set *dest_set, bool is_run, char *pieces[], unsigned num_of_pieces);
 
 
 /**

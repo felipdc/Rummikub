@@ -40,7 +40,7 @@ unsigned cmpfunc (const void * a, const void * b) {
 }
 
 
-void new_set (Set *set, Hand *Player, bool is_run, char *pieces[], unsigned num_of_pieces) {
+void new_set (Set *set, bool is_run, char *pieces[], unsigned num_of_pieces) {
     
     Set *aux_set = set;
     int i = 0;
@@ -82,7 +82,7 @@ void new_set (Set *set, Hand *Player, bool is_run, char *pieces[], unsigned num_
 }
 
 
-void insert_in_set (Set *dest_set, Hand *Player, char *pieces[], unsigned num_of_pieces) {
+void insert_in_set (Set *dest_set, bool is_run, char *pieces[], unsigned num_of_pieces) {
     
     if (insert_set_possible (dest_set, is_run, pieces, num_of_pieces) == false) {
         printf ("Jogada invalida");
@@ -143,6 +143,24 @@ static bool has_same_piece (char *pieces[], unsigned num_of_pieces) {
     return false;
 }
 
+/*
+ * @desc Verifica se as pecas possuem o mesmo numero
+ * @param char *pieces[] - conjunto de pecas a ser analisado
+ * 	  unsigned num_of_pieces - numero total de pecas
+ * @return True caso possua mesmo numero, false contrario
+ */
+
+bool have_same_number (char *pieces[], unsigned num_of_pieces) {
+    // Quarto teste: Se o set for do tipo group, as pecas devem ter a mesmo numero
+	for (int i = 0; i < num_of_pieces; ++i) {
+		for (int j = i; j < num_of_pieces; ++j) {
+			// Retorna falso caso haja pecas de numeros diferentes
+        		if (piece[i][0] != piece[j][0]) return false;
+       	 	}
+    	}
+}
+
+
 bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
     
     // Primeiro teste: Numero de pecas > 3
@@ -200,14 +218,10 @@ bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
     if (non_consecutive_num > joker_num) return false;
 
     // Quarto teste: Se o set for do tipo group, as pecas devem ter a mesmo numero
-    if (is_run == false) {
-        for (int i = 0; i < num_of_pieces; ++i) {
-            for (int j = i; j < num_of_pieces; ++j) {
-                // Retorna falso caso haja pecas de numeros diferentes
-                if (piece[i][0] != piece[j][0]) return false;
-            }
-        }
-    }
+	if (have_same_number(pieces, num_of_pieces) == false) {
+		return false;
+	}
+ 	
     // Se passar em todos os testes, retorna true
     return true;
 }
