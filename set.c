@@ -115,11 +115,33 @@ bool insert_set_possible (Set *dest_set, bool is_run, char *pieces[], unsigned n
         return false;    
     }
 
-
-
 }
 
 
+/*
+ * @desc Verifica se um conjunto de pecas possui pecas repetidas (exceto coringa)
+ * @param char *pieces[] - conjunto de pecas a ser analisado
+ *        unsigned num_of_pieces - numero total de pecas
+ * @return True caso possua cartas repetidas, false contrario
+ */
+
+static bool has_same_piece (char *pieces[], unsigned num_of_pieces) {
+    for (int i = 0; i < num_of_pieces; ++i) {
+        for (int j = i; j < num_of_pieces; ++j) {
+           
+            // Verifica se as pecas sao iguais
+            if (pieces[i][0] == pieces[j][0] &&
+                   pieces[i][1] == pieces[j][1]) {
+                
+                // Veriica se as pecas nao sao coringas
+                if (pieces[i][0] != "*") {
+                    return true;
+                }
+            }
+        } 
+    }
+    return false;
+}
 
 bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
     
@@ -128,23 +150,12 @@ bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
         printf ("Numero de pecas para formar um set deve ser maior do que 3");
         return false;
     }
-
-    // Segundo teste: Exceto o coringa, nao deve haver pecas repetidas no set
-    for (int i = 0; i < num_of_pieces; ++i) {
-        for (int j = i; j < num_of_pieces; ++j) {
-           
-            // Verifica se as pecas sao iguais
-            if (piece[i][0] == piece[j][0] &&
-                   piece[i][1] == piece[j][1]) {
-                
-                // Veriica se as pecas nao sao coringas
-                if (piece[i][0] != "*") {
-                    return false;
-                }
-            }
-        } 
+   
+    // Segundo teste: Veririca se o set possui cartas repetidas (exceto coringa)
+    if (has_same_pieces(pieces, num_of_pieces) == true) {
+        return false;
     }
-    
+
     // Terceiro teste: Se o set for do tipo run, as pecas devem ser uma sequencia
     // 1 - Cria um array com os numeros das pecas (exceto o coringa)
     // 2 - Ordena o array
