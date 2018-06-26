@@ -125,7 +125,7 @@ bool insert_set_possible (Set *dest_set, bool is_run, char *pieces[], unsigned n
  * @return True caso possua cartas repetidas, false contrario
  */
 
-static bool has_same_piece (char *pieces[], unsigned num_of_pieces) {
+static bool have_same_piece (char *pieces[], unsigned num_of_pieces) {
     for (int i = 0; i < num_of_pieces; ++i) {
         for (int j = i; j < num_of_pieces; ++j) {
            
@@ -156,25 +156,13 @@ bool have_same_number (char *pieces[], unsigned num_of_pieces) {
 		for (int j = i; j < num_of_pieces; ++j) {
 			// Retorna falso caso haja pecas de numeros diferentes
         		if (piece[i][0] != piece[j][0]) return false;
-       	 	}
-    	}
+       	 }
+    }
 }
 
 
-bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
-    
-    // Primeiro teste: Numero de pecas > 3
-    if (num_of_pieces < 3) {
-        printf ("Numero de pecas para formar um set deve ser maior do que 3");
-        return false;
-    }
-   
-    // Segundo teste: Veririca se o set possui cartas repetidas (exceto coringa)
-    if (has_same_pieces(pieces, num_of_pieces) == true) {
-        return false;
-    }
+static bool is_a_sequence (char *pieces[], unsigned num_of_pieces) {
 
-    // Terceiro teste: Se o set for do tipo run, as pecas devem ser uma sequencia
     // 1 - Cria um array com os numeros das pecas (exceto o coringa)
     // 2 - Ordena o array
     // 3 - Verifica quantos coringas ha no set
@@ -216,10 +204,36 @@ bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
 
     // 5.
     if (non_consecutive_num > joker_num) return false;
+	
+	// Se passar nos testes, retorna true
+	return true;
+}
 
-    // Quarto teste: Se o set for do tipo group, as pecas devem ter a mesmo numero
-	if (have_same_number(pieces, num_of_pieces) == false) {
-		return false;
+bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
+    
+    // Primeiro teste: Numero de pecas > 3
+    if (num_of_pieces < 3) {
+        printf ("Numero de pecas para formar um set deve ser maior do que 3");
+        return false;
+    }
+   
+    // Segundo teste: Veririca se o set possui cartas repetidas (exceto coringa)
+    if (have_same_piece(pieces, num_of_pieces) == true) {
+        return false;
+    }
+
+    // Terceiro teste: Se o set for do tipo run, as pecas devem ser uma sequencia
+	if (is_run == true) {
+		if (is_a_sequence(piece, num_of_pieces) == false) {
+			return false;
+		}
+	}
+
+	// Se o set for do tipo group, veriica se as cartas sao do mesmo numero
+	if (is_run == false) {
+		if (have_same_number(pieces, num_of_pieces) == false) {
+			return false;
+		}
 	}
  	
     // Se passar em todos os testes, retorna true
