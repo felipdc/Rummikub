@@ -138,8 +138,8 @@ int main (int argc, char *argv[]) {
 	// Testes do Dezan
 	
 	Aux = NewBoard->h;
-	//playerSwitcher(Aux, 20, numOfPlayers);
-	playerSwitcherAlt(Aux, 20, numOfPlayers);
+	playerSwitcher(Aux, 20, numOfPlayers);
+    //playerSwitcherAlt(Aux, 20, numOfPlayers);
 
 	
 	// Fim dos testes

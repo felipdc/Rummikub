@@ -94,6 +94,33 @@ void insert_in_set (Set *dest_set, Hand *Player, char *pieces[], unsigned num_of
 }
 
 
+bool insert_set_possible (Set *dest_set, bool is_run, char *pieces[], unsigned num_of_pieces) {
+
+    // Numero de pecas total apos a insercao
+    unsigned total_num_of_pieces = dest_set->num_of_pieces + num_of_pieces;
+    // Preenche um novo array de pecas com pecas do set + pecas a serem inseridas
+    char *new_pieces[2]; 
+    for (int i = 0; i < dest_set->num_of_pieces; ++i) {
+        new_pieces[i][0] = aux_set->set_piece[i][0];
+        new_pieces[i][1] = aux_set->set_piece[i][1];
+    }
+    
+    for (int i = dest_set->num_of_pieces - 1; i < total_num_of_pieces; ++i) {
+        new_pieces[i][0] = pieces[i][0];
+        new_pieces[i][1] = pieces[i][1];
+    }
+
+    // Primeiro teste: Numero de pecas total < 13
+    if (dest_set->num_of_pieces + num_of_pieces > 13) {
+        return false;    
+    }
+
+
+
+}
+
+
+
 bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
     
     // Primeiro teste: Numero de pecas > 3
@@ -170,5 +197,18 @@ bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
             }
         }
     }
+    // Se passar em todos os testes, retorna true
+    return true;
+}
 
+
+void show_set (Set *set) {
+    Set *aux_set = set;
+    while (aux_set->next != NULL) {
+        aux_set = aux_set->next;
+        for (int i = 0; i < aux_set->num_of_pieces; ++i) {
+            printf ("%s ", aux_set->set_piece[i]);
+        }
+        printf ("\n");
+    }
 }
