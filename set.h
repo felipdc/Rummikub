@@ -42,7 +42,7 @@ void insert_in_set (Set *dest_set, bool is_run, char *pieces[], unsigned num_of_
  *        char *pieces[] - pecas a serem trocadas
  *	  unsigned num_of_pieces - Numero de pecas a ser trocadas
  */
-
+//TODO
 void switch_set_piece (Set *src_set, Set *dest_set, char *pieces[], unsigned num_of_pieces);
 
 
