@@ -2,6 +2,7 @@
 #define MAIN_H_
 
 #include "pack.h"
+#include "set.h"
 
 #define NUM_PIECES 104
 #define NUM_COLOR 4
@@ -38,14 +39,6 @@
 #define INITIAL_HAND_SIZE 14
 
 
-struct set {
-	bool run;	// True se o set eh do tipo RUN, false caso tipo GROUP
-	Color color;	// Cor das pecas caso o set for do tipo GROUP
-	char *set_piece[NUM_COLOR_PIECES];	// Guarda as pecas do set
-	struct set *next;	// Aponta para o proximo set formado no jogo
-}; typedef struct set Set;
-
-
 struct hand {
 	unsigned card_num; // Numero total de pecas na mao do jogador
 	char piece[NUM_PIECES][2];	// Pecas na mao do jogador
@@ -72,4 +65,4 @@ Board *init_game(Board *board, int NofPlayers);
 void show_hand(Hand *Player);
 
 
-#endif // PACK_H_
+#endif // MAIN_H__

@@ -7,6 +7,7 @@
 #include "set.h"
 #include "interface.h"
 
+
 Set *init_set(bool is_run, unsigned idx, unsigned num_pieces){	//Inicializa um set novo
 
 	Set *new_set = NULL;
@@ -18,11 +19,105 @@ Set *init_set(bool is_run, unsigned idx, unsigned num_pieces){	//Inicializa um s
 	return new_set;
 }
 
+
+int cmpfunc (const void * a, const void * b) {
+       return ( *(int*)a - *(int*)b  );
+}
+
+
+/*
+ * @desc Verifica se um conjunto de pecas possui pecas repetidas (exceto coringa)
+ * @param char *pieces[] - conjunto de pecas a ser analisado
+ *        unsigned num_of_pieces - numero total de pecas
+ * @return True caso possua cartas repetidas, false contrario
+ */
+
+
+static bool have_same_piece (char *pieces[], unsigned num_of_pieces) {
+    for (int i = 0; i < num_of_pieces; ++i) {
+        for (int j = i; j < num_of_pieces; ++j) {
+           
+            // Verifica se as pecas sao iguais
+            if (pieces[i][0] == pieces[j][0] &&
+                   pieces[i][1] == pieces[j][1]) {
+                
+                // Veriica se as pecas nao sao coringas
+                if (pieces[i][0] != '*') {
+                    return true;
+                }
+            }
+        } 
+    }
+    return false;
+}
+
+
+/*
+ * @desc Verifica se as pecas possuem o mesmo numero
+ * @param char *pieces[] - conjunto de pecas a ser analisado
+ * 	  unsigned num_of_pieces - numero total de pecas
+ * @return True caso possua mesmo numero, false contrario
+ */
+
+static bool have_same_number (char *pieces[], unsigned num_of_pieces) {
+	// Quarto teste: Se o set for do tipo group, as pecas devem ter a mesmo numero
+	for (int i = 0; i < num_of_pieces; ++i) {
+		for (int j = i; j < num_of_pieces; ++j) {
+			// Retorna falso caso haja pecas de numeros diferentes
+				if (pieces[i][0] != pieces[j][0]) return false;
+		 }
+	}
+}
+
+
 static unsigned get_piece_number (char piece[]) {
     if (piece[0] == '*') {
         return 99;  // Retorna 99 caso a peca seja um coringa
     }
     return strtol (piece, NULL, 16);
+}
+
+
+static bool is_a_sequence (char *pieces[], unsigned num_of_pieces) {
+
+    // 1 - Cria um array com os numeros das pecas (exceto o coringa)
+    // 2 - Ordena o array
+    // 3 - Verifica quantos coringas ha no set
+    // 4 - Verifica se (X[i+1] - X[i] == 1). Se for 2, checa se ha um coringa no set
+    // 5 - Verifica se ha coringas suficientes
+
+    // 1.
+    unsigned pieces_num[num_of_pieces];
+    for (int i = 0; i < num_of_pieces; ++i) {
+        pieces_num[i] = get_piece_number(pieces[i]);
+    }
+    
+    // 2.
+    qsort (pieces_num, num_of_pieces, sizeof(unsigned), cmpfunc);
+
+    // 3.
+    unsigned joker_num = 0;
+    for (int i = 0; i < num_of_pieces; ++i) {
+        if (pieces_num[i] == 99) ++joker_num;
+    }
+
+    // 4.
+    unsigned non_consecutive_num = 0;   // Conta quantas vezes sera necessario um coringa
+    for (int i = 0; i < num_of_pieces - joker_num - 1; ++i) {
+        if (pieces_num[i+1] - pieces_num[i] == 1) {
+            continue;
+        }
+        if (pieces_num[i+1] - pieces_num[i] == 2) {
+            ++non_consecutive_num;
+        }
+        if (pieces_num[i+1] - pieces_num[i] == 3) {
+            non_consecutive_num += 2;
+        }
+        else {
+            printf ("Pecas nao estao em sequencia!\n");
+            return false;
+        }
+    }
 }
 
 
@@ -32,11 +127,6 @@ static Color get_piece_color (char piece[]) {
     if (piece[1] == '#') return black;
     if (piece[1] == '$') return red;
     if (piece[1] == '*') return none;
-}
-
-
-unsigned cmpfunc (const void * a, const void * b) {
-       return ( *(unsigned*)a - *(unsigned*)b  );
 }
 
 
@@ -88,9 +178,14 @@ void insert_in_set (Set *dest_set, bool is_run, char *pieces[], unsigned num_of_
         printf ("Jogada invalida");
         return;
     }
-
-    // TODO
-
+	
+	// Insere as novas pecas no set
+	for (int i = 0; i < num_of_pieces; ++i) {
+		dest_set->set_piece[i + dest_set->num_of_pieces][0] = pieces[i][0];	
+		dest_set->set_piece[i + dest_set->num_of_pieces][1] = pieces[i][1];	
+	}	
+	// Aumenta o numero de pecas do set
+	dest_set->num_of_pieces += num_of_pieces;
 }
 
 
@@ -98,11 +193,12 @@ bool insert_set_possible (Set *dest_set, bool is_run, char *pieces[], unsigned n
 
     // Numero de pecas total apos a insercao
     unsigned total_num_of_pieces = dest_set->num_of_pieces + num_of_pieces;
+
     // Preenche um novo array de pecas com pecas do set + pecas a serem inseridas
     char *new_pieces[2]; 
     for (int i = 0; i < dest_set->num_of_pieces; ++i) {
-        new_pieces[i][0] = aux_set->set_piece[i][0];
-        new_pieces[i][1] = aux_set->set_piece[i][1];
+        new_pieces[i][0] = dest_set->set_piece[i][0];
+        new_pieces[i][1] = dest_set->set_piece[i][1];
     }
     
     for (int i = dest_set->num_of_pieces - 1; i < total_num_of_pieces; ++i) {
@@ -115,99 +211,29 @@ bool insert_set_possible (Set *dest_set, bool is_run, char *pieces[], unsigned n
         return false;    
     }
 
-}
-
-
-/*
- * @desc Verifica se um conjunto de pecas possui pecas repetidas (exceto coringa)
- * @param char *pieces[] - conjunto de pecas a ser analisado
- *        unsigned num_of_pieces - numero total de pecas
- * @return True caso possua cartas repetidas, false contrario
- */
-
-static bool have_same_piece (char *pieces[], unsigned num_of_pieces) {
-    for (int i = 0; i < num_of_pieces; ++i) {
-        for (int j = i; j < num_of_pieces; ++j) {
-           
-            // Verifica se as pecas sao iguais
-            if (pieces[i][0] == pieces[j][0] &&
-                   pieces[i][1] == pieces[j][1]) {
-                
-                // Veriica se as pecas nao sao coringas
-                if (pieces[i][0] != "*") {
-                    return true;
-                }
-            }
-        } 
-    }
-    return false;
-}
-
-/*
- * @desc Verifica se as pecas possuem o mesmo numero
- * @param char *pieces[] - conjunto de pecas a ser analisado
- * 	  unsigned num_of_pieces - numero total de pecas
- * @return True caso possua mesmo numero, false contrario
- */
-
-bool have_same_number (char *pieces[], unsigned num_of_pieces) {
-    // Quarto teste: Se o set for do tipo group, as pecas devem ter a mesmo numero
-	for (int i = 0; i < num_of_pieces; ++i) {
-		for (int j = i; j < num_of_pieces; ++j) {
-			// Retorna falso caso haja pecas de numeros diferentes
-        		if (piece[i][0] != piece[j][0]) return false;
-       	 }
-    }
-}
-
-
-static bool is_a_sequence (char *pieces[], unsigned num_of_pieces) {
-
-    // 1 - Cria um array com os numeros das pecas (exceto o coringa)
-    // 2 - Ordena o array
-    // 3 - Verifica quantos coringas ha no set
-    // 4 - Verifica se (X[i+1] - X[i] == 1). Se for 2, checa se ha um coringa no set
-    // 5 - Verifica se ha coringas suficientes
-
-    // 1.
-    unsigned pieces_num[num_of_pieces];
-    for (int i = 0; i < num_of_pieces; ++i) {
-        pieces_num[i] = get_piece_number(pieces[i]);
-    }
-    
-    // 2.
-    qsort (pieces_num, num_of_pieces, sizeof(unsigned), cmpfunc);
-
-    // 3.
-    unsigned joker_num = 0;
-    for (int i = 0; i < num_of_pieces; ++i) {
-        if (pieces_num[i] == 99) ++joker_num;
-    }
-
-    // 4.
-    unsigned non_consecutive_num = 0;   // Conta quantas vezes sera necessario um coringa
-    for (int i = 0; i < num_of_pieces - joker_num - 1; ++i) {
-        if (pieces_num[i+1] - pieces_num[i] == 1) {
-            continue;
-        }
-        if (pieces_num[i+1] - pieces_num[i] == 2) {
-            ++non_consecutive_num;
-        }
-        if (pieces_num[i+1] - pieces_num[i] == 3) {
-            non_consecutive_num += 2;
-        }
-        else {
-            printf ("Pecas nao estao em sequencia!\n");
-            return false;
-        }
-    }
-
-    // 5.
-    if (non_consecutive_num > joker_num) return false;
+	// Segundo teste: Exceto coringa, nao deve haver pecas repetidas
+	if (have_same_piece (new_pieces, total_num_of_pieces) == true) {
+		return false;
+	}
 	
-	// Se passar nos testes, retorna true
+	// Terceiro teste: se o set for do tipo run, deve ser uma sequencia
+	if (is_run == true) {
+		if (is_a_sequence (new_pieces, total_num_of_pieces) == false) {
+			return false;
+		}
+	}
+
+	// Quarto teste: Se o teste for do tipo group, deve ter o mesmo numero
+	if (is_run == false) {
+		if (have_same_number (new_pieces, total_num_of_pieces) == false) {
+			return false;
+		}
+	}
+	
+	// Se passar em todos os testes, retorna true
 	return true;
-}
+}	
+
 
 bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
     
@@ -223,8 +249,8 @@ bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
     }
 
     // Terceiro teste: Se o set for do tipo run, as pecas devem ser uma sequencia
-	if (is_run == true) {
-		if (is_a_sequence(piece, num_of_pieces) == false) {
+    if (is_run == true) {
+		if (is_a_sequence(pieces, num_of_pieces) == false) {
 			return false;
 		}
 	}

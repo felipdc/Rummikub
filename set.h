@@ -39,12 +39,11 @@ void insert_in_set (Set *dest_set, bool is_run, char *pieces[], unsigned num_of_
  * @desc Troca pecas entre sets
  * @param Set *src_set - Set em que as pecas de origem estao
  *        Set *dest_set - Set para onde as pecas vao (caso NULL, um novo set eh criado)
- *        Hand *Player - jogador que esta fazendo a jogada
  *        char *pieces[] - pecas a serem trocadas
  *	  unsigned num_of_pieces - Numero de pecas a ser trocadas
  */
 
-void switch_set_piece (Set *src_set, Set *dest_set, Hand *Player, char *pieces[], unsigned num_of_pieces);
+void switch_set_piece (Set *src_set, Set *dest_set, char *pieces[], unsigned num_of_pieces);
 
 
 /**
