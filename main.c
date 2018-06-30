@@ -103,12 +103,56 @@ void victory(Board *board){
 
 	while(AuxHand != NULL){
 		if(AuxHand->card_num == 0){
-			printf("O vencedor é o jogador %d.\n", i + 1);
+			printf("O vencedor é o jogador %d.\n", i + 1);  // [1, 4, 3, 6]
 		}
 		++i;
 		AuxHand = AuxHand->next;
 	}
 }
+
+Hand *sort_hands(Hand *Player, int numOfPlayers){
+	Hand *Aux = Player;
+	int i = 0;
+	int k = 0;
+	while (k < numOfPlayers){
+		while(i < (Aux->card_num)-1){
+			int j = 0;
+			while(j < (Aux->card_num)-1-i) {
+				if (Aux->piece[j][1] > Aux->piece[j+1][1]){
+					char tmp = Aux->piece[j+1][0];
+					char tmp2 = Aux->piece[j+1][1];
+					Aux->piece[j+1][0] = Aux->piece[j][0];
+					Aux->piece[j+1][1] = Aux->piece[j][1];
+					Aux->piece[j][0] = tmp;
+					Aux->piece[j][1] = tmp2;
+				}
+				j++;
+			}
+			i++;
+		}
+		i = 0;
+		while(i < (Aux->card_num)-1){
+			int j = 0;
+			while(j < (Aux->card_num)-1-i) {
+				if (Aux->piece[j][0] > Aux->piece[j+1][0] && Aux->piece[j][1] == Aux->piece[j+1][1]){
+					char tmp = Aux->piece[j+1][0];
+					char tmp2 = Aux->piece[j+1][1];
+					Aux->piece[j+1][0] = Aux->piece[j][0];
+					Aux->piece[j+1][1] = Aux->piece[j][1];
+					Aux->piece[j][0] = tmp;
+					Aux->piece[j][1] = tmp2;
+				}
+				j++;
+			}
+			i++;
+		}
+		i = 0;
+		k++;
+		Aux = Aux->next;
+	}
+	return Player;
+}
+
 
 int main (int argc, char *argv[]) {
 
@@ -138,8 +182,8 @@ int main (int argc, char *argv[]) {
 	// Testes do Dezan
 	
 	Aux = NewBoard->h;
+	Aux = sort_hands(Aux, numOfPlayers);
 	playerSwitcher(Aux, 20, numOfPlayers);
-    //playerSwitcherAlt(Aux, 20, numOfPlayers);
 
 	
 	// Fim dos testes
