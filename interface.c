@@ -111,7 +111,7 @@ void printSets (int numOfSets) {
     for (int i = 0; i < numOfSets; i++){
         int numOfPieces = (rand() % 13) + 1;
         cCount += numOfPieces*5;
-        if (cCount > 60){
+        if (cCount > 62){
             printf("\n\n");
             cCount = numOfPieces*5;   
         } 
@@ -123,7 +123,7 @@ void printSets (int numOfSets) {
     }
 }
 
-void createSet(Hand *Player) {
+Set* createSet(Hand *Player, Set *set) {
     Hand *Aux = Player;
     printf("\nEscreva o set com as cartas separadas \npor espaco (Ex: \"4! 5! 6!\")\n");
     char cards[50];
@@ -148,12 +148,11 @@ void createSet(Hand *Player) {
             isRun = false;
         }
     }
-    is_new_set_possible(isRun, pieces, numOfPieces);
-    tStop();
+    return new_set(set, isRun, pieces, numOfPieces);
 }
 
 
-int playsMenu(Hand* Player, int playerNumber){
+int playsMenu(Hand* Player, Set* set, int playerNumber){
     printf("[Jogador %d]", playerNumber);
     printf("\n\n[1] Colocar set no tabuleiro"); 
     printf("\n[2] Colocar cartas em outros sets");
@@ -164,7 +163,7 @@ int playsMenu(Hand* Player, int playerNumber){
         int prompt = intInput();
         switch(prompt) {
             case 1:
-                createSet(Player);
+                createSet(Player, set);
             case 2:
                 return 2;
             case 3:
@@ -181,7 +180,7 @@ int playsMenu(Hand* Player, int playerNumber){
 // Função pra checar se ta passando a vez do jogador
 // Apenas um teste
 
-void playerSwitcher(Hand* Player, int numOfTurns, int numOfPlayers){
+void playerSwitcher(Hand* Player, Set* set, int numOfTurns, int numOfPlayers){
     Hand *Aux = Player;
     int i = 0;
     while(i < numOfTurns){
@@ -192,7 +191,7 @@ void playerSwitcher(Hand* Player, int numOfTurns, int numOfPlayers){
         printf("\n=========================================================\n\n");
         showAllHands(Aux, numOfPlayers, (i%numOfPlayers)+1);
         printf("=========================================================\n");
-        playsMenu(Aux, (i%numOfPlayers)+1);
+        playsMenu(Aux, set, (i%numOfPlayers)+1);
         i++;
     }
 }

@@ -164,7 +164,6 @@ int main (int argc, char *argv[]) {
 	printf("\n");
 
 	NewBoard = init_game(NewBoard, numOfPlayers);
-
 	Hand *Aux = NewBoard->h;
 
 	// while(i < numOfPlayers){
@@ -183,7 +182,7 @@ int main (int argc, char *argv[]) {
 	
 	Aux = NewBoard->h;
 	Aux = sort_hands(Aux, numOfPlayers);
-	playerSwitcher(Aux, 20, numOfPlayers);
+	playerSwitcher(Aux, newSet, 20, numOfPlayers);
 
 	
 	// Fim dos testes

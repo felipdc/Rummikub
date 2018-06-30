@@ -13,9 +13,9 @@ float floatInput();
 int startMenu();
 void showHand(Hand *Player, int playerNumber, bool isTurn);
 void showAllHands(Hand* Player, int numOfPlayers, int activePlayer);
-void playerSwitcher(Hand* Player, int numOfTurns, int numOfPlayers);
-void createSet(Hand *Player);
-int playsMenu(Hand* Player, int playerNumber);
+void playerSwitcher(Hand* Player, Set* set, int numOfTurns, int numOfPlayers);
+Set *createSet(Hand *Player, Set *set);
+int playsMenu(Hand* Player, Set* set, int playerNumber);
 void printSets (int numOfSets);
 
 #endif
