@@ -103,13 +103,18 @@ void victory(Board *board){
 
 	while(AuxHand != NULL){
 		if(AuxHand->card_num == 0){
+<<<<<<< HEAD
 			printf("O vencedor é o jogador %d.\n", i + 1); 
+=======
+			printf("O vencedor é o jogador %d.\n", i + 1);
+>>>>>>> parent of 25dcf99... added hand sorting
 		}
 		++i;
 		AuxHand = AuxHand->next;
 	}
 }
 
+<<<<<<< HEAD
 Hand *sort_hands(Hand *Player, int numOfPlayers){
 	Hand *Aux = Player;
 	int i = 0;
@@ -151,6 +156,8 @@ Hand *sort_hands(Hand *Player, int numOfPlayers){
 }
 
 
+=======
+>>>>>>> parent of 25dcf99... added hand sorting
 int main (int argc, char *argv[]) {
 
 	int i = 0;
@@ -179,8 +186,8 @@ int main (int argc, char *argv[]) {
 	// Testes do Dezan
 	
 	Aux = NewBoard->h;
-	Aux = sort_hands(Aux, numOfPlayers);
 	playerSwitcher(Aux, 20, numOfPlayers);
+    //playerSwitcherAlt(Aux, 20, numOfPlayers);
 
 	
 	// Fim dos testes
