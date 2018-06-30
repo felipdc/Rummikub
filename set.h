@@ -75,6 +75,8 @@ bool insert_set_possible (Set *dest_set, bool is_run, char *pieces[], unsigned n
 
 void show_set (Set *set);
 
+
+
 Set *init_set(bool is_run, unsigned idx, unsigned num_pieces);	//Inicializa um tabuleiro novo
 
 #endif // SET_H_    

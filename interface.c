@@ -8,7 +8,10 @@
 #include "interface.h"
 #include "set.h"
 
-
+void tStop(){
+    printf("\n\nPressione ENTER para continuar ");
+    getchar();
+}
 
 void removeNL(char *input){                             // Função para remover o \n do fgets
     size_t len = strlen(input);
@@ -65,9 +68,9 @@ int startMenu() {
 void showHand(Hand *Player, int playerNumber, bool isTurn) {
     
     if (isTurn){
-        printf(" -> [PLAYER %d]", playerNumber);
+        printf("-> [Jogador %d]", playerNumber);
     } else {
-        printf("[Player %d]", playerNumber);
+        printf("[Jogador %d]", playerNumber);
     }
 
     int i = 0;
@@ -100,6 +103,80 @@ void showAllHands(Hand* Player, int numOfPlayers, int activePlayer){
 	}
 }
 
+
+// Função para teste de impressão de sets
+void printSets (int numOfSets) {
+    srand(time(NULL));
+    int cCount = 0;
+    for (int i = 0; i < numOfSets; i++){
+        int numOfPieces = (rand() % 13) + 1;
+        cCount += numOfPieces*5;
+        if (cCount > 60){
+            printf("\n\n");
+            cCount = numOfPieces*5;   
+        } 
+        printf(" [");
+        for (int j = 0; j < numOfPieces - 1; j++){
+            printf("##, ");
+        }
+        printf("##]  ");
+    }
+}
+
+void createSet(Hand *Player) {
+    Hand *Aux = Player;
+    printf("\nEscreva o set com as cartas separadas \npor espaco (Ex: \"4! 5! 6!\")\n");
+    char cards[50];
+    fgets(cards, 50, stdin);
+    removeNL(cards);
+    int numOfPieces = 0;
+    char pieces[20][2];
+    for (int i = 0; i <= strlen(cards); i++){
+        if (cards[i] == ' ' || cards[i] == '\0'){
+            numOfPieces++;
+        } else if (cards[i+1] == ' ' || cards[i+1] == '\0'){
+            pieces[numOfPieces][0] = cards[i-1];
+            pieces[numOfPieces][1] = cards[i];
+        }
+    }
+    bool isRun = true;
+    for (int i = 0; i < numOfPieces; i++){
+        if(pieces[i][0] != (pieces[0][0]+i) && pieces[i][0] != '*'){
+            isRun = false;
+        }
+    }
+    char *Pieces[2];
+    Pieces[2] = pieces[0];
+    is_new_set_possible(isRun, Pieces, numOfPieces);
+    tStop();
+}
+
+
+int playsMenu(Hand* Player, int playerNumber){
+    printf("[Jogador %d]", playerNumber);
+    printf("\n\n[1] Colocar set no tabuleiro"); 
+    printf("\n[2] Colocar cartas em outros sets");
+    printf("\n[3] Comprar do baralho");
+    printf("\n[4] Terminar o turno");
+    while(1){
+        printf("\n\nEscolha sua jogada: ");
+        int prompt = intInput();
+        switch(prompt) {
+            case 1:
+                createSet(Player);
+            case 2:
+                return 2;
+            case 3:
+                return 3;
+            case 4:
+                return 4;
+                break;
+            default:
+                printf("Opcao nao encontrada.");
+        }
+    }
+}
+
 // Função pra checar se ta passando a vez do jogador
 // Apenas um teste
 
@@ -114,51 +191,7 @@ void playerSwitcher(Hand* Player, int numOfTurns, int numOfPlayers){
         printf("\n=========================================================\n\n");
         showAllHands(Aux, numOfPlayers, (i%numOfPlayers)+1);
         printf("=========================================================\n");
-        printf("\nPressione ENTER pra passar de turno (%d/%d) (TESTE)\n", i+1, numOfTurns);
+        playsMenu(Aux, (i%numOfPlayers)+1);
         i++;
-        getchar();
-    }
-}
-
-// Versão alternartiva da playerSwitcher que mostra apenas o jogador que está jogando
-
-void playerSwitcherAlt(Hand* Player, int numOfTurns, int numOfPlayers){
-    Hand *Aux = Player;
-    int i = 0;
-    while(i < numOfTurns){
-        system(CLEAR);
-        printf("=========================================================\n");
-        printf("\n\n\n\n\tOS SETS FICARIAM AQUI, PROVAVELMENTE\n\n\n\n\n");
-        printf("=========================================================\n\n");
-        showHand(Aux, (i%numOfPlayers)+1, false);
-        printf("=========================================================\n");
-        printf("\nPressione ENTER pra passar de turno (%d/%d) (TESTE)\n", i+1, numOfTurns);
-        i++;
-        if(i % numOfPlayers == 0){
-            Aux = Player;
-        } else {
-            Aux = Aux->next;
-        }
-        getchar();
-    }
-}
-
-
-// Função para teste de impressão de sets
-void printSets (int numOfSets) {
-    srand(time(NULL));
-    int cCount = 0;
-    for (int i = 0; i < numOfSets; i++){
-        int numOfPieces = (rand() % 13) + 1;
-        cCount += numOfPieces*5;
-        if (cCount > 57){
-            printf("\n\n");
-            cCount = numOfPieces*4+2;   
-        } 
-        printf(" [");
-        for (int j = 0; j < numOfPieces - 1; j++){
-            printf("##, ");
-        }
-        printf("##]  ");
     }
 }

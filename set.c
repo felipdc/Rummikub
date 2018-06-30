@@ -90,7 +90,7 @@ static unsigned get_piece_number (char piece[]) {
 }
 
 
-static bool is_a_sequence (char *pieces[], unsigned num_of_pieces) {
+static bool is_a_sequence (char *pieces[2], unsigned num_of_pieces) {
 
     // 1 - Cria um array com os numeros das pecas (exceto o coringa)
     // 2 - Ordena o array
@@ -259,7 +259,7 @@ bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
     
     // Primeiro teste: Numero de pecas > 3
     if (num_of_pieces < 3) {
-        printf ("Numero de pecas para formar um set deve ser maior do que 3\n");
+        printf ("Numero de pecas para formar um set deve ser maior do que 2\n");
         return false;
     }
    
