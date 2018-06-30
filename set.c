@@ -35,8 +35,10 @@ int cmpfunc (const void * a, const void * b) {
 
 static bool have_same_piece (char *pieces[], unsigned num_of_pieces) {
     for (int i = 0; i < num_of_pieces; ++i) {
-        for (int j = i + 1; j < num_of_pieces - 1; ++j) {
+        for (int j = 0; j < num_of_pieces; ++j) {
            
+            if (i == j) continue;
+
             // Verifica se as pecas sao iguais
             if (pieces[i][0] == pieces[j][0] &&
                    pieces[i][1] == pieces[j][1]) {
@@ -62,7 +64,13 @@ static bool have_same_piece (char *pieces[], unsigned num_of_pieces) {
 static bool have_same_number (char *pieces[], unsigned num_of_pieces) {
 	// Quarto teste: Se o set for do tipo group, as pecas devem ter a mesmo numero
 	for (int i = 0; i < num_of_pieces; ++i) {
-		for (int j = i + 1; j < num_of_pieces - 1; ++j) {
+		for (int j = 0; j < num_of_pieces; ++j) {
+
+            if (i == j) continue; // Nao avalia a mesma peca
+            // Se a peca for coringa, passa para a proxima peca
+            if (pieces[i][0] == '*' || pieces[j][0] == '*') {
+                continue;
+            }
 			// Retorna falso caso haja pecas de numeros diferentes
             if (pieces[i][0] != pieces[j][0]) {
                 return false;    
@@ -111,10 +119,10 @@ static bool is_a_sequence (char *pieces[], unsigned num_of_pieces) {
         if (pieces_num[i+1] - pieces_num[i] == 1) {
             continue;
         }
-        if (pieces_num[i+1] - pieces_num[i] == 2) {
+        else if (pieces_num[i+1] - pieces_num[i] == 2) {
             ++non_consecutive_num;
         }
-        if (pieces_num[i+1] - pieces_num[i] == 3) {
+        else if (pieces_num[i+1] - pieces_num[i] == 3) {
             non_consecutive_num += 2;
         }
         else {
@@ -122,6 +130,12 @@ static bool is_a_sequence (char *pieces[], unsigned num_of_pieces) {
             return false;
         }
     }
+    
+    // Verifica se ha coringas suficientes
+    if (joker_num < non_consecutive_num) {
+        return false;
+    }
+    return true;
 }
 
 
@@ -140,7 +154,7 @@ Set * new_set (Set *set, bool is_run, char *pieces[2], unsigned num_of_pieces) {
     int i = 0;
 
     if (is_new_set_possible (is_run, pieces, num_of_pieces) == false) {
-        printf ("Jogada invalida");
+        printf ("Jogada invalida\n");
         return NULL;
     }
     // Verifica se eh o primeiro set do jogo
@@ -258,6 +272,7 @@ bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
     // Terceiro teste: Se o set for do tipo run, as pecas devem ser uma sequencia
     if (is_run == true) {
 		if (is_a_sequence(pieces, num_of_pieces) == false) {
+            printf ("O conjunto de pecas nao forma uma sequencia\n");
 			return false;
 		}
 	}
