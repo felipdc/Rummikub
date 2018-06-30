@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "main.h"
-#include "pack.h"
-#include "set.h"
-#include "interface.h"
+#include "../main.h"
+#include "../pack.h"
+#include "../set.h"
+#include "../interface.h"
 
 
 int main (void) {
