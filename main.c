@@ -103,7 +103,7 @@ void victory(Board *board){
 
 	while(AuxHand != NULL){
 		if(AuxHand->card_num == 0){
-			printf("O vencedor é o jogador %d.\n", i + 1);  // [1, 4, 3, 6]
+			printf("O vencedor é o jogador %d.\n", i + 1); 
 		}
 		++i;
 		AuxHand = AuxHand->next;
@@ -113,9 +113,8 @@ void victory(Board *board){
 Hand *sort_hands(Hand *Player, int numOfPlayers){
 	Hand *Aux = Player;
 	int i = 0;
-	int k = 0;
-	while (k < numOfPlayers){
-		while(i < (Aux->card_num)-1){
+	while (Aux != NULL){
+		while(i < (Aux->card_num)-1){   // Ordena os naipes
 			int j = 0;
 			while(j < (Aux->card_num)-1-i) {
 				if (Aux->piece[j][1] > Aux->piece[j+1][1]){
@@ -131,7 +130,7 @@ Hand *sort_hands(Hand *Player, int numOfPlayers){
 			i++;
 		}
 		i = 0;
-		while(i < (Aux->card_num)-1){
+		while(i < (Aux->card_num)-1){ // Ordena as cartas dentro de seu naipe
 			int j = 0;
 			while(j < (Aux->card_num)-1-i) {
 				if (Aux->piece[j][0] > Aux->piece[j+1][0] && Aux->piece[j][1] == Aux->piece[j+1][1]){
@@ -146,8 +145,6 @@ Hand *sort_hands(Hand *Player, int numOfPlayers){
 			}
 			i++;
 		}
-		i = 0;
-		k++;
 		Aux = Aux->next;
 	}
 	return Player;
