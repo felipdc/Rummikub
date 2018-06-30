@@ -7,7 +7,7 @@ struct set {
 	bool run;   // True se o set eh do tipo RUN, false caso tipo GROUP
 	unsigned set_idx;   // Index do set para facil visualizacao
     unsigned num_of_pieces;
-	char set_piece[MAX_SET_PIECES][2];	// Guarda as pecas do set
+	char **set_piece;	// Guarda as pecas do set
 	struct set *next;	// Aponta para o proximo set formado no jogo
 }; typedef struct set Set;
 
@@ -21,7 +21,7 @@ struct set {
  *	  unsigned num_of_pieces - Numero de pecas a colocar no set
  */
 
-void new_set (Set *set, bool is_run, char *pieces[2], unsigned num_of_pieces);
+Set *new_set (Set *set, bool is_run, char *pieces[2], unsigned num_of_pieces);
 
 
 /**
