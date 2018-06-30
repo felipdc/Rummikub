@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <time.h>
 #include "pack.h"
 #include "main.h"
 #include "interface.h"
+#include "set.h"
 
 
 
@@ -106,9 +108,10 @@ void playerSwitcher(Hand* Player, int numOfTurns, int numOfPlayers){
     int i = 0;
     while(i < numOfTurns){
         system(CLEAR);
-        printf("=========================================================");
-        printf("\n\n\n\n\n\tOS SETS FICARIAM AQUI, PROVAVELMENTE\n\n\n\n\n");
-        printf("=========================================================\n\n");
+        printf("=========================================================\n");
+        //printf("\n\n\n\n\tOS SETS FICARIAM AQUI, PROVAVELMENTE\n\n\n\n\n");
+        printSets(9);
+        printf("\n=========================================================\n\n");
         showAllHands(Aux, numOfPlayers, (i%numOfPlayers)+1);
         printf("=========================================================\n");
         printf("\nPressione ENTER pra passar de turno (%d/%d) (TESTE)\n", i+1, numOfTurns);
@@ -124,8 +127,8 @@ void playerSwitcherAlt(Hand* Player, int numOfTurns, int numOfPlayers){
     int i = 0;
     while(i < numOfTurns){
         system(CLEAR);
-        printf("=========================================================");
-        printf("\n\n\n\n\n\tOS SETS FICARIAM AQUI, PROVAVELMENTE\n\n\n\n\n");
+        printf("=========================================================\n");
+        printf("\n\n\n\n\tOS SETS FICARIAM AQUI, PROVAVELMENTE\n\n\n\n\n");
         printf("=========================================================\n\n");
         showHand(Aux, (i%numOfPlayers)+1, false);
         printf("=========================================================\n");
@@ -137,5 +140,25 @@ void playerSwitcherAlt(Hand* Player, int numOfTurns, int numOfPlayers){
             Aux = Aux->next;
         }
         getchar();
+    }
+}
+
+
+// Função para teste de impressão de sets
+void printSets (int numOfSets) {
+    srand(time(NULL));
+    int cCount = 0;
+    for (int i = 0; i < numOfSets; i++){
+        int numOfPieces = (rand() % 13) + 1;
+        cCount += numOfPieces*5;
+        if (cCount > 57){
+            printf("\n\n");
+            cCount = numOfPieces*4+2;   
+        } 
+        printf(" [");
+        for (int j = 0; j < numOfPieces - 1; j++){
+            printf("##, ");
+        }
+        printf("##]  ");
     }
 }
