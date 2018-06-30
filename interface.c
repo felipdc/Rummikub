@@ -130,11 +130,14 @@ void createSet(Hand *Player) {
     fgets(cards, 50, stdin);
     removeNL(cards);
     int numOfPieces = 0;
-    char pieces[20][2];
+    char **pieces;
+    int pieces_index = 0;
+    pieces = malloc (strlen(cards));
     for (int i = 0; i <= strlen(cards); i++){
         if (cards[i] == ' ' || cards[i] == '\0'){
             numOfPieces++;
         } else if (cards[i+1] == ' ' || cards[i+1] == '\0'){
+            pieces[pieces_index++] = malloc(2);
             pieces[numOfPieces][0] = cards[i-1];
             pieces[numOfPieces][1] = cards[i];
         }
@@ -145,9 +148,7 @@ void createSet(Hand *Player) {
             isRun = false;
         }
     }
-    char *Pieces[2];
-    Pieces[2] = pieces[0];
-    is_new_set_possible(isRun, Pieces, numOfPieces);
+    is_new_set_possible(isRun, pieces, numOfPieces);
     tStop();
 }
 
