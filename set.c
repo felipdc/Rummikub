@@ -32,7 +32,6 @@ int cmpfunc (const void * a, const void * b) {
  * @return True caso possua cartas repetidas, false contrario
  */
 
-
 static bool have_same_piece (char *pieces[], unsigned num_of_pieces) {
     for (int i = 0; i < num_of_pieces; ++i) {
         for (int j = 0; j < num_of_pieces; ++j) {
@@ -136,15 +135,6 @@ static bool is_a_sequence (char *pieces[], unsigned num_of_pieces) {
         return false;
     }
     return true;
-}
-
-
-static Color get_piece_color (char piece[]) {
-    if (piece[1] == '!') return blue;
-    if (piece[1] == '@') return yellow;
-    if (piece[1] == '#') return black;
-    if (piece[1] == '$') return red;
-    if (piece[1] == '*') return none;
 }
 
 

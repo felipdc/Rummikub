@@ -156,7 +156,7 @@ Hand *sort_hands(Hand *Player, int numOfPlayers){
 
 int main (int argc, char *argv[]) {
 
-	int i = 0;
+	/* int i = 0; */
 	
 	Board *NewBoard = init_board();	// Cria e aloca memoria para NewBoard
 
