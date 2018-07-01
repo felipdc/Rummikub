@@ -2,20 +2,6 @@
 -- Adicionem as funcoes aqui caso lembrem de alguma
 -- Editem conforme necessidade do programa
 
-
-Funcao embaralhar		//FEITO	
-@desc "Desordena" o vetor de strings board->piece que contem as pecas
-@param	Recebe board->piece (Vetor de strings do tabuleiro)
-@return Pode ser um void, alterando direto no endereco do parametro.
-
-Funcao iniciar jogador	//FEITO
-@desc Tem que alocar memoria e iniciar a struct board e para a struct hand
-@param Pode ser sem parametro
-@return Retorna a struct board iniciada
-
-Funcao verificar vitoria
-@desc Percorre a lista hand ate achar um jogador com card_num = 0
-@param board->h
-@return True caso haja jogador vitorioso, false caso contrario
-
-
+-- Veriricar se o jogador possui as pecas antes de escolher para fazer/inserir um set na interface.c
+-- Fazer a funcao de trocar pecas entre sets
+-- Fazer a funcao que le as cartas de um arquivo como pedido
