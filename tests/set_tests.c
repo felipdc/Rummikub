@@ -23,6 +23,7 @@ int main (void) {
     test_set3 = new_set (test_set3, false, test_pieces_3, 4);
     test_set4 = new_set (test_set4, true, test_pieces_4, 4);
     test_set5 = new_set (test_set5, true, test_pieces_5, 4);
+    test_set1 = new_set (test_set1, true, test_pieces_5, 4);
     if (test_set1 == NULL) {
         printf ("Conjunto 1 nao passou no teste\n");
     }

@@ -52,6 +52,8 @@ Hand *insert_hand(Hand *Players, Hand *New){	//Insere uma mão nova nas existent
 Hand *hand_out(Piece *Pack, Hand *Player, int NPieces){	//Distribui NPieces do pack para uma mão
 
 	int i = 0;
+    Player->card_num = Player->card_num + NPieces;
+
 	Piece *Temp = Pack;
 
 	while(i < NPieces){
@@ -60,10 +62,22 @@ Hand *hand_out(Piece *Pack, Hand *Player, int NPieces){	//Distribui NPieces do p
 		++i;
 		Temp = Temp->next;
 	}
-	Player->card_num = Player->card_num + NPieces;
 
 	return Player;
 }
+
+Hand *get_from_pack (Piece *Pack, Hand *Player) {
+
+	Piece *Temp = Pack;
+
+	strcpy(Player->piece[Player->card_num], Temp->info);
+
+    ++Player->card_num;
+
+    return Player;
+}
+
+
 
 //Inicializa o jogo distribuindo as INITIAL_HAND_SIZE peças
 //para NofPlayers jogadores e retorna o tabuleiro
@@ -82,6 +96,7 @@ Board *init_game(Board *board, int NofPlayers){
 		board->h = insert_hand(board->h, AuxHand);
 		++i;
 	}
+    
 	return board;
 }
 
@@ -164,27 +179,9 @@ int main (int argc, char *argv[]) {
 	printf("\n");
 
 	NewBoard = init_game(NewBoard, numOfPlayers);
-	Hand *Aux = NewBoard->h;
 
-	// while(i < numOfPlayers){
-	// 	printf("\n\nHand %d:\n\n", i + 1);
-	//  	show_hand(Aux);
-	// 	++i;
-	//  	Aux = Aux->next;
-	// }
-	
-	// printf("\n\nPack after hand out:\n\n");
-	// show_pack(NewBoard->p);
+	playerSwitcher(NewBoard, numOfPlayers);
 
-	
-
-	// Testes do Dezan
-	
-	Aux = NewBoard->h;
-	Aux = sort_hands(Aux, numOfPlayers);
-	playerSwitcher(Aux, newSet, 20, numOfPlayers);
-
-	
 	// Fim dos testes
 
 	return 0;

@@ -124,7 +124,6 @@ void printSets (int numOfSets) {
 }
 
 Set* createSet(Hand *Player, Set *set) {
-    Hand *Aux = Player;
     printf("\nEscreva o set com as cartas separadas \npor espaco (Ex: \"4! 5! 6!\")\n");
     char cards[50];
     fgets(cards, 50, stdin);
@@ -140,6 +139,7 @@ Set* createSet(Hand *Player, Set *set) {
             pieces[pieces_index++] = malloc(2);
             pieces[numOfPieces][0] = cards[i-1];
             pieces[numOfPieces][1] = cards[i];
+            pieces[numOfPieces][2] = '\0';
         }
     }
     bool isRun = true;
@@ -151,26 +151,30 @@ Set* createSet(Hand *Player, Set *set) {
     return new_set(set, isRun, pieces, numOfPieces);
 }
 
-
-int playsMenu(Hand* Player, Set* set, int playerNumber){
+Board *playsMenu(Board *game_board, int playerNumber){
     printf("[Jogador %d]", playerNumber);
     printf("\n\n[1] Colocar set no tabuleiro"); 
     printf("\n[2] Colocar cartas em outros sets");
     printf("\n[3] Comprar do baralho");
     printf("\n[4] Terminar o turno");
+    printf("\n[5] Fechar o programa");
     while(1){
         printf("\n\nEscolha sua jogada: ");
         int prompt = intInput();
         switch(prompt) {
             case 1:
-                createSet(Player, set);
+                game_board->s = createSet(game_board->h, game_board->s);
+                return(game_board);
             case 2:
-                return 2;
+                return(game_board);    
             case 3:
-                return 3;
+                game_board->h = get_from_pack (game_board->p, game_board->h);
+                game_board->p = pop_piece (game_board->p, 1); 
+                return(game_board);
             case 4:
-                return 4;
-                break;
+                return(game_board);
+            case 5:
+                return NULL;
             default:
                 printf("Opcao nao encontrada.");
         }
@@ -180,18 +184,22 @@ int playsMenu(Hand* Player, Set* set, int playerNumber){
 // Função pra checar se ta passando a vez do jogador
 // Apenas um teste
 
-void playerSwitcher(Hand* Player, Set* set, int numOfTurns, int numOfPlayers){
-    Hand *Aux = Player;
+void playerSwitcher(Board *game_board, int numOfPlayers){
+    Hand *aux_hand = game_board->h;
     int i = 0;
-    while(i < numOfTurns){
+    while(1) {
         system(CLEAR);
         printf("=========================================================\n");
         //printf("\n\n\n\n\tOS SETS FICARIAM AQUI, PROVAVELMENTE\n\n\n\n\n");
-        printSets(9);
+        /* printSets(9); */
+        show_set (game_board->s);
         printf("\n=========================================================\n\n");
-        showAllHands(Aux, numOfPlayers, (i%numOfPlayers)+1);
+        showAllHands(aux_hand, numOfPlayers, (i%numOfPlayers)+1);
         printf("=========================================================\n");
-        playsMenu(Aux, set, (i%numOfPlayers)+1);
-        i++;
+        game_board = playsMenu(game_board, (i%numOfPlayers)+1);
+        if (game_board == NULL) {
+            return;
+        }
+        ++i;
     }
 }

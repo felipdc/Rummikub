@@ -138,7 +138,7 @@ static bool is_a_sequence (char *pieces[2], unsigned num_of_pieces) {
 }
 
 
-Set * new_set (Set *set, bool is_run, char *pieces[2], unsigned num_of_pieces) {
+Set * new_set (Set *set, bool is_run, char *pieces[], unsigned num_of_pieces) {
     
     Set *aux_set = set;
     int i = 0;
@@ -147,6 +147,7 @@ Set * new_set (Set *set, bool is_run, char *pieces[2], unsigned num_of_pieces) {
         printf ("Jogada invalida\n");
         return NULL;
     }
+
     // Verifica se eh o primeiro set do jogo
     if (set == NULL) {
         aux_set = init_set(is_run, 0, num_of_pieces);	//Como é o primeiro, o index é zero
@@ -172,9 +173,12 @@ Set * new_set (Set *set, bool is_run, char *pieces[2], unsigned num_of_pieces) {
     // Aloca memoria para um novo set
     aux_set->next = init_set(is_run, i, num_of_pieces);
     aux_set = aux_set->next;    // Muda para o novo set
+  
 
     // Insere as pecas no set
+    aux_set->set_piece = malloc (num_of_pieces);
     for (i = 0; i < num_of_pieces; ++i) {
+        aux_set->set_piece[i] = malloc(2);
         aux_set->set_piece[i][0] = pieces[i][0];
         aux_set->set_piece[i][1] = pieces[i][1];
     }
@@ -284,7 +288,7 @@ void show_set (Set *set) {
     Set *aux_set = set;
     while (aux_set != NULL) {
         for (int i = 0; i < aux_set->num_of_pieces; ++i) {
-            printf ("%s ", aux_set->set_piece[i]);
+            printf ("%c%c ", aux_set->set_piece[i][0], aux_set->set_piece[i][1]);
         }
         printf ("\n");
         aux_set = aux_set->next;

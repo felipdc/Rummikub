@@ -21,7 +21,7 @@ struct set {
  *	  unsigned num_of_pieces - Numero de pecas a colocar no set
  */
 
-Set *new_set (Set *set, bool is_run, char *pieces[2], unsigned num_of_pieces);
+Set *new_set (Set *set, bool is_run, char *pieces[], unsigned num_of_pieces);
 
 
 /**

@@ -60,6 +60,8 @@ Hand *insert_hand(Hand *Players, Hand *New);
 
 Hand *hand_out(Piece *Pack, Hand *Player, int NPieces);
 
+Hand *get_from_pack (Piece *Pack, Hand *Player);
+
 Board *init_game(Board *board, int NofPlayers);
 
 void show_hand(Hand *Player);
