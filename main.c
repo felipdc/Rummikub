@@ -127,7 +127,7 @@ void victory(Board *board){
 	}
 }
 
-Hand *sort_hands(Hand *Player, int numOfPlayers){
+void *sort_hands(Hand *Player, int numOfPlayers){
 	Hand *Aux = Player;
 	int i = 0;
 	int k = 0;
@@ -135,7 +135,7 @@ Hand *sort_hands(Hand *Player, int numOfPlayers){
 		while(i < (Aux->card_num)-1){
 			int j = 0;
 			while(j < (Aux->card_num)-1-i) { // Ordena os naipes
-				if (Aux->piece[j][1] > Aux->piece[j+1][1]){
+				if ((Aux->piece[j][1] > Aux->piece[j+1][1]) || Aux->piece[j][0] == '0' || Aux->piece[j][1] == '*'){
 					char tmp = Aux->piece[j+1][0];
 					char tmp2 = Aux->piece[j+1][1];
 					Aux->piece[j+1][0] = Aux->piece[j][0];
@@ -151,7 +151,7 @@ Hand *sort_hands(Hand *Player, int numOfPlayers){
 		while(i < (Aux->card_num)-1){
 			int j = 0;
 			while(j < (Aux->card_num)-1-i) { // Ordenas as cartes em seus naipes
-				if (Aux->piece[j][0] > Aux->piece[j+1][0] && Aux->piece[j][1] == Aux->piece[j+1][1]){
+				if ((Aux->piece[j][0] > Aux->piece[j+1][0] && Aux->piece[j][1] == Aux->piece[j+1][1])|| Aux->piece[j][0] == '0'|| Aux->piece[j][1] == '*'){
 					char tmp = Aux->piece[j+1][0];
 					char tmp2 = Aux->piece[j+1][1];
 					Aux->piece[j+1][0] = Aux->piece[j][0];
@@ -167,7 +167,6 @@ Hand *sort_hands(Hand *Player, int numOfPlayers){
 		k++;
 		Aux = Aux->next;
 	}
-	return Player;
 }
 
 
@@ -181,7 +180,6 @@ int main (int argc, char *argv[]) {
 	printf("\n");
 
 	NewBoard = init_game(NewBoard, numOfPlayers);
-
 	playerSwitcher(NewBoard, numOfPlayers);
 
 	// Fim dos testes

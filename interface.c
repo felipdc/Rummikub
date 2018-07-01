@@ -104,25 +104,6 @@ void showAllHands(Hand* Player, int numOfPlayers, int activePlayer){
 }
 
 
-// Função para teste de impressão de sets
-void printSets (int numOfSets) {
-    srand(time(NULL));
-    int cCount = 0;
-    for (int i = 0; i < numOfSets; i++){
-        int numOfPieces = (rand() % 13) + 1;
-        cCount += numOfPieces*5;
-        if (cCount > 62){
-            printf("\n\n");
-            cCount = numOfPieces*5;   
-        } 
-        printf(" [");
-        for (int j = 0; j < numOfPieces - 1; j++){
-            printf("##, ");
-        }
-        printf("##]  ");
-    }
-}
-
 Set* createSet(Hand *Player, Set *set) {
     printf("\nEscreva o set com as cartas separadas \npor espaco (Ex: \"4! 5! 6!\")\n");
     char cards[50];
@@ -133,9 +114,9 @@ Set* createSet(Hand *Player, Set *set) {
     int pieces_index = 0;
     pieces = malloc (strlen(cards));
     for (int i = 0; i <= strlen(cards); i++){
-        if (cards[i] == ' ' || cards[i] == '\0'){
+        if ((cards[i] == ' ' && cards[i+1] != '\0') || cards[i] == '\0'){
             numOfPieces++;
-        } else if (cards[i+1] == ' ' || cards[i+1] == '\0'){
+        } else if (cards[i+1] == ' ' || (cards[i+1] == '\0' && cards[i] != ' ')){
             pieces[pieces_index++] = malloc(2);
             pieces[numOfPieces][0] = cards[i-1];
             pieces[numOfPieces][1] = cards[i];
@@ -187,6 +168,7 @@ Board *playsMenu(Board *game_board, int playerNumber){
 
 void playerSwitcher(Board *game_board, int numOfPlayers){
     Hand *aux_hand = game_board->h;
+    sort_hands(aux_hand, numOfPlayers);
     int i = 0;
     while(1) {
         system(CLEAR);

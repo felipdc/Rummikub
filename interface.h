@@ -7,6 +7,7 @@
 #define CLEAR "clear"
 #endif
 
+void tStop();
 void removeNL(char *input);
 int intInput();
 float floatInput();

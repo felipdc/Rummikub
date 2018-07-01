@@ -64,6 +64,8 @@ Hand *get_from_pack (Piece *Pack, Hand *Player);
 
 Board *init_game(Board *board, int NofPlayers);
 
+void *sort_hands(Hand *Player, int numOfPlayers);
+
 void show_hand(Hand *Player);
 
 

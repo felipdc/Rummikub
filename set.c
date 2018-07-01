@@ -145,6 +145,7 @@ Set * new_set (Set *set, bool is_run, char *pieces[], unsigned num_of_pieces) {
 
     if (is_new_set_possible (is_run, pieces, num_of_pieces) == false) {
         printf ("Jogada invalida\n");
+        tStop();
         return NULL;
     }
 
@@ -286,11 +287,18 @@ bool is_new_set_possible (bool is_run, char *pieces[], unsigned num_of_pieces) {
 
 void show_set (Set *set) {
     Set *aux_set = set;
+    int cCount = 0;
     while (aux_set != NULL) {
-        for (int i = 0; i < aux_set->num_of_pieces; ++i) {
-            printf ("%c%c ", aux_set->set_piece[i][0], aux_set->set_piece[i][1]);
+        cCount += aux_set->num_of_pieces*5;
+        if (cCount > 62){
+            printf("\n\n");
+            cCount = (aux_set->num_of_pieces)*5;   
+        } 
+        printf(" [");
+        for (int i = 0; i < (aux_set->num_of_pieces)-1; ++i) {
+            printf ("%c%c, ", aux_set->set_piece[i][0], aux_set->set_piece[i][1]);
         }
-        printf ("\n");
+        printf ("%c%c]  ", aux_set->set_piece[aux_set->num_of_pieces-1][0], aux_set->set_piece[aux_set->num_of_pieces-1][1]);
         aux_set = aux_set->next;
     }
 }
