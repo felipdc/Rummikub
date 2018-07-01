@@ -296,14 +296,9 @@ void show_set (Set *set) {
         } 
         printf(" [");
         for (int i = 0; i < (aux_set->num_of_pieces)-1; ++i) {
-            if(aux_set->set_piece[i][0] != '0'){
-                printf ("%c%c, ", aux_set->set_piece[i][0], aux_set->set_piece[i][1]);
-            }
+            printf ("%c%c, ", aux_set->set_piece[i][0], aux_set->set_piece[i][1]);
         }
-        if (aux_set->set_piece[aux_set->num_of_pieces-1][0] != '0'){
-            printf ("%c%c", aux_set->set_piece[aux_set->num_of_pieces-1][0], aux_set->set_piece[aux_set->num_of_pieces-1][1]);
-        }
-        printf("]   ");
+        printf ("%c%c]  ", aux_set->set_piece[aux_set->num_of_pieces-1][0], aux_set->set_piece[aux_set->num_of_pieces-1][1]);
         aux_set = aux_set->next;
     }
 }

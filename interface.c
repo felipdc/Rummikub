@@ -77,11 +77,13 @@ void showHand(Hand *Player, int playerNumber, bool isTurn) {
     printf("\n[");
 	Hand *Aux = Player;
 
-	while(i < Aux->card_num-1){
-		printf("%c%c, ", Aux->piece[i][0], Aux->piece[i][1]);
-		++i;
+	while(Aux->piece[i+1][0] != '0' && i < Aux->card_num-1){
+        printf("%c%c, ", Aux->piece[i][0], Aux->piece[i][1]);
+        ++i;
 	}
-    printf("%c%c]\n\n", Aux->piece[i][0], Aux->piece[i][1]);
+    
+    printf("%c%c", Aux->piece[i][0], Aux->piece[i][1]);
+    printf("]\n\n");
 }
 
 
@@ -151,10 +153,11 @@ Set* createSet(Hand *Player, Set *set) {
             for (int i = 0; i < numOfPieces; i++){
                 for(int j = 0; j < Aux->card_num; j++){
                     if (pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1]){
-                        Player->piece[j][0] == '0';
+                        Aux->piece[j][0] = '0';
+                        Aux->piece[j][1] = '0';
                     }
                 }
-        }
+            }
             break;
         }
     }
@@ -208,19 +211,20 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
     bool hasBought = false;
     while(1) {
         system(CLEAR);
-        printf("=========================================================\n");
+        sort_hands(game_board->h, numOfPlayers);
+        printf("===============================================================\n");
         //printf("\n\n\n\n\tOS SETS FICARIAM AQUI, PROVAVELMENTE\n\n\n\n\n");
         /* printSets(9); */
         show_set (game_board->s);
-        printf("\n=========================================================\n\n");
+        printf("\n===============================================================\n\n");
         showAllHands(aux_hand, numOfPlayers, (i%numOfPlayers)+1);
-        printf("=========================================================\n");
+        printf("===============================================================\n");
         //game_board = playsMenu(game_board, (i%numOfPlayers)+1, numOfPlayers);
         
 
 
         
-        sort_hands(game_board->h, numOfPlayers);
+        
         printf("[Jogador %d]", (i%numOfPlayers)+1);
         printf("\n\n[1] Colocar set no tabuleiro"); 
         printf("\n[2] Colocar cartas em outros sets");
