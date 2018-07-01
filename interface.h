@@ -16,7 +16,7 @@ void showHand(Hand *Player, int playerNumber, bool isTurn);
 void showAllHands(Hand* Player, int numOfPlayers, int activePlayer);
 void playerSwitcher(Board *game_board, int numOfPlayers);
 Set *createSet(Hand *Player, Set *set);
-Board *playsMenu(Board *game_board, int playerNumber);
+Board *playsMenu(Board *game_board, int playerNumber, int numOfPlayers);
 void printSets (int numOfSets);
 
 #endif

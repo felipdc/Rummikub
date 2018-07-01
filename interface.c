@@ -106,45 +106,57 @@ void showAllHands(Hand* Player, int numOfPlayers, int activePlayer){
 
 Set* createSet(Hand *Player, Set *set) {
     Hand *Aux = Player;
-    printf("\nEscreva o set com as cartas separadas \npor espaco (Ex: \"4! 5! 6!\")\n");
     char cards[50];
-    fgets(cards, 50, stdin);
-    removeNL(cards);
-    int numOfPieces = 0;
+    int numOfPieces;
     char **pieces;
     int pieces_index = 0;
-    pieces = malloc (strlen(cards));
-    for (int i = 0; i <= strlen(cards); i++){
-        if ((cards[i] == ' ' && cards[i+1] != '\0') || cards[i] == '\0'){
-            numOfPieces++;
-        } else if (cards[i+1] == ' ' || (cards[i+1] == '\0' && cards[i] != ' ')){
-            pieces[pieces_index++] = malloc(2);
-            pieces[numOfPieces][0] = cards[i-1];
-            pieces[numOfPieces][1] = cards[i];
-            pieces[numOfPieces][2] = '\0';
+    bool isRun;
+    int equalCount;
+
+    while(1){
+        printf("\nEscreva o set com as cartas separadas por \nespaco (Ex: \"4! 5! 6!\") ou \"0\" para voltar.\n");
+        fgets(cards, 50, stdin);
+        removeNL(cards);
+        numOfPieces = 0;
+        pieces = malloc (strlen(cards));
+        if(cards[0] == '0'){
+            return set;
         }
-    }
-    bool isRun = true;
-    int equalCount = 0;
-    for (int i = 0; i < numOfPieces; i++){
-        if(pieces[i][0] != (pieces[0][0]+i) && pieces[i][0] != '*'){
-            isRun = false;
-        }
-        for(int j = 0; j < Aux->card_num; j++){
-            if (pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1]){
-                equalCount++;
+        for (int i = 0; i <= strlen(cards); i++){
+            if ((cards[i] == ' ' && cards[i+1] != '\0') || cards[i] == '\0'){
+                numOfPieces++;
+            } else if (cards[i+1] == ' ' || (cards[i+1] == '\0' && cards[i] != ' ')){
+                pieces[pieces_index++] = malloc(2);
+                pieces[numOfPieces][0] = cards[i-1];
+                pieces[numOfPieces][1] = cards[i];
+                pieces[numOfPieces][2] = '\0';
             }
         }
-    }
-    if (equalCount != numOfPieces){
-        printf("\nVoce nao possui essas cartas.");
-        tStop();
-        return set;
+        isRun = true;
+        equalCount = 0;
+        for (int i = 0; i < numOfPieces; i++){
+            if(pieces[i][0] != (pieces[0][0]+i) && pieces[i][0] != '*'){
+                isRun = false;
+            }
+            for(int j = 0; j < Aux->card_num; j++){
+                if (pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1]){
+                    equalCount++;
+                }
+            }
+        }
+        if (equalCount != numOfPieces){
+            printf("\nVoce nao possui essas cartas.");
+            tStop();
+        } else {
+            break;
+        }
     }
     return new_set(set, isRun, pieces, numOfPieces);
 }
 
-Board *playsMenu(Board *game_board, int playerNumber){
+Board *playsMenu(Board *game_board, int playerNumber, int numOfPlayers){
+    bool hasBought = false;
+    sort_hands(game_board->h, numOfPlayers);
     printf("[Jogador %d]", playerNumber);
     printf("\n\n[1] Colocar set no tabuleiro"); 
     printf("\n[2] Colocar cartas em outros sets");
@@ -157,14 +169,16 @@ Board *playsMenu(Board *game_board, int playerNumber){
         switch(prompt) {
             case 1:
                 game_board->s = createSet(game_board->h, game_board->s);
-                return(game_board);
             case 2:
-                // TODO
-                return(game_board);    
+                // TODO   
             case 3:
-                game_board->h = get_from_pack (game_board->p, game_board->h);
-                game_board->p = pop_piece (game_board->p, 1); 
-                return(game_board);
+                if(hasBought == false){
+                    game_board->h = get_from_pack (game_board->p, game_board->h);
+                    game_board->p = pop_piece (game_board->p, 1); 
+                    hasBought = true;
+                } else {
+                    printf("\nVoce ja comprou nesse turno.");
+                }
             case 4:
                 return(game_board);
             case 5:
@@ -180,7 +194,6 @@ Board *playsMenu(Board *game_board, int playerNumber){
 
 void playerSwitcher(Board *game_board, int numOfPlayers){
     Hand *aux_hand = game_board->h;
-    sort_hands(aux_hand, numOfPlayers);
     int i = 0;
     while(1) {
         system(CLEAR);
@@ -191,7 +204,7 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
         printf("\n=========================================================\n\n");
         showAllHands(aux_hand, numOfPlayers, (i%numOfPlayers)+1);
         printf("=========================================================\n");
-        game_board = playsMenu(game_board, (i%numOfPlayers)+1);
+        game_board = playsMenu(game_board, (i%numOfPlayers)+1, numOfPlayers);
         // Passa para o proximo jogador
         game_board->h = game_board->h->next;
         if (game_board == NULL) {
