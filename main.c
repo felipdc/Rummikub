@@ -180,6 +180,7 @@ int main (int argc, char *argv[]) {
 	printf("\n");
 
 	NewBoard = init_game(NewBoard, numOfPlayers);
+	sort_hands(NewBoard->h, numOfPlayers);
 	playerSwitcher(NewBoard, numOfPlayers);
 
 	// Fim dos testes

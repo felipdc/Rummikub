@@ -139,7 +139,7 @@ Set* createSet(Hand *Player, Set *set) {
                 isRun = false;
             }
             for(int j = 0; j < Aux->card_num; j++){
-                if (pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1]){
+                if (pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1] && (Aux->piece[j][1] != Aux->piece[j+1][1] || Aux->piece[j][0] != Aux->piece[j+1][0])){
                     equalCount++;
                 }
             }
@@ -148,46 +148,56 @@ Set* createSet(Hand *Player, Set *set) {
             printf("\nVoce nao possui essas cartas.");
             tStop();
         } else {
+            for (int i = 0; i < numOfPieces; i++){
+                for(int j = 0; j < Aux->card_num; j++){
+                    if (pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1]){
+                        Player->piece[j][0] == '0';
+                    }
+                }
+        }
             break;
         }
     }
     return new_set(set, isRun, pieces, numOfPieces);
 }
 
-Board *playsMenu(Board *game_board, int playerNumber, int numOfPlayers){
-    bool hasBought = false;
-    sort_hands(game_board->h, numOfPlayers);
-    printf("[Jogador %d]", playerNumber);
-    printf("\n\n[1] Colocar set no tabuleiro"); 
-    printf("\n[2] Colocar cartas em outros sets");
-    printf("\n[3] Comprar do baralho");
-    printf("\n[4] Terminar o turno");
-    printf("\n[5] Fechar o programa");
-    while(1){
-        printf("\n\nEscolha sua jogada: ");
-        int prompt = intInput();
-        switch(prompt) {
-            case 1:
-                game_board->s = createSet(game_board->h, game_board->s);
-            case 2:
-                // TODO   
-            case 3:
-                if(hasBought == false){
-                    game_board->h = get_from_pack (game_board->p, game_board->h);
-                    game_board->p = pop_piece (game_board->p, 1); 
-                    hasBought = true;
-                } else {
-                    printf("\nVoce ja comprou nesse turno.");
-                }
-            case 4:
-                return(game_board);
-            case 5:
-                return NULL;
-            default:
-                printf("Opcao nao encontrada.");
-        }
-    }
-}
+// Board *playsMenu(Board *game_board, int playerNumber, int numOfPlayers){
+//     bool hasBought = false;
+//     sort_hands(game_board->h, numOfPlayers);
+//     printf("[Jogador %d]", playerNumber);
+//     printf("\n\n[1] Colocar set no tabuleiro"); 
+//     printf("\n[2] Colocar cartas em outros sets");
+//     printf("\n[3] Comprar do baralho");
+//     printf("\n[4] Terminar o turno");
+//     printf("\n[5] Fechar o programa");
+//     while(1){
+//         printf("\n\nEscolha sua jogada: ");
+//         int prompt = intInput();
+//         switch(prompt) {
+//             case 1:
+//                 game_board->s = createSet(game_board->h, game_board->s);
+//                 break;
+//             case 2:
+//                 // TODO   
+//             case 3:
+//                 if(hasBought == false){
+//                     game_board->h = get_from_pack (game_board->p, game_board->h);
+//                     game_board->p = pop_piece (game_board->p, 1); 
+//                     hasBought = true;
+//                 } else {
+//                     printf("\nVoce ja comprou nesse turno.");
+//                 }
+//                 break;
+//             case 4:
+//                 return(game_board);
+//             case 5:
+//                 return NULL;
+//             default:
+//                 printf("Opcao nao encontrada.");
+//                 break;
+//         }
+//     }
+// }
 
 // Função pra checar se ta passando a vez do jogador
 // Apenas um teste
@@ -195,6 +205,7 @@ Board *playsMenu(Board *game_board, int playerNumber, int numOfPlayers){
 void playerSwitcher(Board *game_board, int numOfPlayers){
     Hand *aux_hand = game_board->h;
     int i = 0;
+    bool hasBought = false;
     while(1) {
         system(CLEAR);
         printf("=========================================================\n");
@@ -204,12 +215,57 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
         printf("\n=========================================================\n\n");
         showAllHands(aux_hand, numOfPlayers, (i%numOfPlayers)+1);
         printf("=========================================================\n");
-        game_board = playsMenu(game_board, (i%numOfPlayers)+1, numOfPlayers);
+        //game_board = playsMenu(game_board, (i%numOfPlayers)+1, numOfPlayers);
+        
+
+
+        
+        sort_hands(game_board->h, numOfPlayers);
+        printf("[Jogador %d]", (i%numOfPlayers)+1);
+        printf("\n\n[1] Colocar set no tabuleiro"); 
+        printf("\n[2] Colocar cartas em outros sets");
+        printf("\n[3] Comprar do baralho");
+        printf("\n[4] Terminar o turno");
+        printf("\n[5] Fechar o programa");
+
+            printf("\n\nEscolha sua jogada: ");
+            int prompt = intInput();
+            switch(prompt) {
+                case 1:
+                    game_board->s = createSet(game_board->h, game_board->s);
+                    break;
+                case 2:
+                    // TODO   
+                case 3:
+                    if(hasBought == false){
+                        game_board->h = get_from_pack (game_board->p, game_board->h);
+                        game_board->p = pop_piece (game_board->p, 1); 
+                        hasBought = true;
+                    } else {
+                        printf("\nVoce ja comprou nesse turno.");
+                        tStop();
+                    }
+                    break;
+                case 4:
+                    game_board->h = game_board->h->next;
+                    hasBought = false;
+                    ++i;
+                    break;
+                case 5:
+                    return;
+                default:
+                    printf("Opcao nao encontrada.");
+                    break;
+            }
+        
+
+
+
         // Passa para o proximo jogador
-        game_board->h = game_board->h->next;
+        //game_board->h = game_board->h->next;
         if (game_board == NULL) {
             return;
         }
-        ++i;
+        
     }
 }
