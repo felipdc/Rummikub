@@ -105,6 +105,7 @@ void showAllHands(Hand* Player, int numOfPlayers, int activePlayer){
 
 
 Set* createSet(Hand *Player, Set *set) {
+    Hand *Aux = Player;
     printf("\nEscreva o set com as cartas separadas \npor espaco (Ex: \"4! 5! 6!\")\n");
     char cards[50];
     fgets(cards, 50, stdin);
@@ -124,10 +125,21 @@ Set* createSet(Hand *Player, Set *set) {
         }
     }
     bool isRun = true;
+    int equalCount = 0;
     for (int i = 0; i < numOfPieces; i++){
         if(pieces[i][0] != (pieces[0][0]+i) && pieces[i][0] != '*'){
             isRun = false;
         }
+        for(int j = 0; j < Aux->card_num; j++){
+            if (pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1]){
+                equalCount++;
+            }
+        }
+    }
+    if (equalCount != numOfPieces){
+        printf("\nVoce nao possui essas cartas.");
+        tStop();
+        return set;
     }
     return new_set(set, isRun, pieces, numOfPieces);
 }
