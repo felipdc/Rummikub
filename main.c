@@ -38,13 +38,15 @@ Hand *insert_hand(Hand *Players, Hand *New){	//Insere uma mão nova nas existent
 	Hand *Aux = Players;
 
 	if(Aux == NULL){
+        New->next = New; // Faz a lista circular
 		return New;
 	}
 
-	while(Aux->next != NULL){
+	while(Aux->next != Players){
 		Aux = Aux->next;
 	}
 	Aux->next = New;
+    New->next = Players;
 	return Players;
 }
 

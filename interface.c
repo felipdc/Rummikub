@@ -166,6 +166,7 @@ Board *playsMenu(Board *game_board, int playerNumber){
                 game_board->s = createSet(game_board->h, game_board->s);
                 return(game_board);
             case 2:
+                // TODO
                 return(game_board);    
             case 3:
                 game_board->h = get_from_pack (game_board->p, game_board->h);
@@ -197,6 +198,8 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
         showAllHands(aux_hand, numOfPlayers, (i%numOfPlayers)+1);
         printf("=========================================================\n");
         game_board = playsMenu(game_board, (i%numOfPlayers)+1);
+        // Passa para o proximo jogador
+        game_board->h = game_board->h->next;
         if (game_board == NULL) {
             return;
         }
