@@ -3,5 +3,6 @@
 -- Editem conforme necessidade do programa
 
 -- Veriricar se o jogador possui as pecas antes de escolher para fazer/inserir um set na interface.c
+-- Remover as pecas da mao do jogador apos o jogador criar/inserir as pecas em um set
 -- Fazer a funcao de trocar pecas entre sets
 -- Fazer a funcao que le as cartas de um arquivo como pedido
