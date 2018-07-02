@@ -114,7 +114,10 @@ Set *createSet(Hand *Player, Set *set) {
     int pieces_index = 0;
     bool isRun;
     bool erased;
+    bool counted;
     int equalCount;
+    int i = 0;
+    int j = 0;
     pieces = malloc (strlen(cards));
 
     while(1){
@@ -125,7 +128,7 @@ Set *createSet(Hand *Player, Set *set) {
         if(cards[0] == '0'){
             return set;
         }
-        for (int i = 0; i <= strlen(cards); i++){
+        for (i = 0; i <= strlen(cards); i++){
             if ((cards[i] == ' ' && cards[i+1] != '\0') || cards[i] == '\0'){
                 numOfPieces++;
             } else if (cards[i+1] == ' ' || (cards[i+1] == '\0' && cards[i] != ' ')){
@@ -139,14 +142,16 @@ Set *createSet(Hand *Player, Set *set) {
         equalCount = 0;
         int start = strtol(pieces[0], NULL, 16);
         int current;
-        for (int i = 0; i < numOfPieces; i++){
+        for (i = 0; i < numOfPieces; i++){
             current = strtol(pieces[i], NULL, 16);
             if((current != start+i) && pieces[i][0] != '*'){
                 isRun = false;
             }
-            for(int j = 0; j < Aux->card_num; j++){
-                if (pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1] && (Aux->piece[j][1] != Aux->piece[j+1][1] || Aux->piece[j][0] != Aux->piece[j+1][0])){
+            counted = false;
+            for(j = 0; j < Aux->card_num; j++){
+                if ((pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1] && (Aux->piece[j][1] != Aux->piece[j+1][1] || Aux->piece[j][0] != Aux->piece[j+1][0])) && counted == false){
                     equalCount++;
+                    counted = true;
                 }
             }
         }
@@ -157,10 +162,10 @@ Set *createSet(Hand *Player, Set *set) {
         } else {
             if(is_new_set_possible(isRun, pieces, numOfPieces) == true){
                 Aux->card_num -= numOfPieces;
-                for (int i = 0; i < numOfPieces; i++){
+                for (i = 0; i < numOfPieces; i++){
                     erased = false;
-                    for(int j = 0; j < Aux->card_num; j++){
-                        if ((pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1]) && erased == false){
+                    for(j = 0; j < Aux->card_num; j++){
+                        if (((pieces[i][0] == Aux->piece[j][0]) && (pieces[i][1] == Aux->piece[j][1])) && (erased == false)){
                             Aux->piece[j][0] = '0';
                             Aux->piece[j][1] = '0';
                             erased = true;
@@ -171,6 +176,7 @@ Set *createSet(Hand *Player, Set *set) {
             break;
         }
     }
+
     return new_set(set, isRun, pieces, numOfPieces);
 }
 
@@ -288,7 +294,6 @@ Set *insert_occup_set(Board *game_board){
         aux_set = aux_set->next;
     }
     // Insere as cartas no set
-    printf("jnasd %d\n", numOfPieces);
     insert_in_set (aux_set, aux_set->run, pieces, numOfPieces);
 
     game_board->h = erase_piece(game_board->h, pieces, numOfPieces);
@@ -297,6 +302,7 @@ Set *insert_occup_set(Board *game_board){
 }
 
 void playerSwitcher(Board *game_board, int numOfPlayers){
+
     Hand *aux_hand = game_board->h;
     int i = 0;
     sort_hands(game_board->h, numOfPlayers);
