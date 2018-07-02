@@ -114,13 +114,13 @@ Set* createSet(Hand *Player, Set *set) {
     int pieces_index = 0;
     bool isRun;
     int equalCount;
+    pieces = malloc (strlen(cards));
 
     while(1){
         printf("\nEscreva o set com as cartas separadas por \nespaco (Ex: \"4! 5! 6!\") ou \"0\" para voltar.\n");
         fgets(cards, 50, stdin);
         removeNL(cards);
         numOfPieces = 0;
-        pieces = malloc (strlen(cards));
         if(cards[0] == '0'){
             return set;
         }
@@ -241,18 +241,13 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
                 case 2:
                     // TODO   
                 case 3:
-                    if(hasBought == false){
-                        game_board->h = get_from_pack (game_board->p, game_board->h);
-                        game_board->p = pop_piece (game_board->p, 1); 
-                        hasBought = true;
-                    } else {
-                        printf("\nVoce ja comprou nesse turno.");
-                        tStop();
-                    }
-                    break;
+                    game_board->h = get_from_pack (game_board->p, game_board->h);
+                    game_board->p = pop_piece (game_board->p, 1);
+                    game_board->h = game_board->h->next;
+                    ++i;
+                    break; 
                 case 4:
                     game_board->h = game_board->h->next;
-                    hasBought = false;
                     ++i;
                     break;
                 case 5:
