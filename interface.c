@@ -137,8 +137,11 @@ Set *createSet(Hand *Player, Set *set) {
         }
         isRun = true;
         equalCount = 0;
+        int start = strtol(pieces[0], NULL, 16);
+        int current;
         for (int i = 0; i < numOfPieces; i++){
-            if((pieces[i][0] != (pieces[0][0]+i)) && pieces[i][0] != '*'){
+            current = strtol(pieces[i], NULL, 16);
+            if((current != start+i) && pieces[i][0] != '*'){
                 isRun = false;
             }
             for(int j = 0; j < Aux->card_num; j++){
@@ -147,6 +150,7 @@ Set *createSet(Hand *Player, Set *set) {
                 }
             }
         }
+        tStop();
         if (equalCount != numOfPieces){
             printf("\nVoce nao possui essas cartas.");
             pieces_index = 0;
@@ -169,47 +173,6 @@ Set *createSet(Hand *Player, Set *set) {
     }
     return new_set(set, isRun, pieces, numOfPieces);
 }
-
-// Board *playsMenu(Board *game_board, int playerNumber, int numOfPlayers){
-//     bool hasBought = false;
-//     sort_hands(game_board->h, numOfPlayers);
-//     printf("[Jogador %d]", playerNumber);
-//     printf("\n\n[1] Colocar set no tabuleiro"); 
-//     printf("\n[2] Colocar cartas em outros sets");
-//     printf("\n[3] Comprar do baralho");
-//     printf("\n[4] Terminar o turno");
-//     printf("\n[5] Fechar o programa");
-//     while(1){
-//         printf("\n\nEscolha sua jogada: ");
-//         int prompt = intInput();
-//         switch(prompt) {
-//             case 1:
-//                 game_board->s = createSet(game_board->h, game_board->s);
-//                 break;
-//             case 2:
-//                 // TODO   
-//             case 3:
-//                 if(hasBought == false){
-//                     game_board->h = get_from_pack (game_board->p, game_board->h);
-//                     game_board->p = pop_piece (game_board->p, 1); 
-//                     hasBought = true;
-//                 } else {
-//                     printf("\nVoce ja comprou nesse turno.");
-//                 }
-//                 break;
-//             case 4:
-//                 return(game_board);
-//             case 5:
-//                 return NULL;
-//             default:
-//                 printf("Opcao nao encontrada.");
-//                 break;
-//         }
-//     }
-// }
-
-// Função pra checar se ta passando a vez do jogador
-// Apenas um teste
 
 Set *insert_occup_set(Board *game_board){
 
