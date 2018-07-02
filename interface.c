@@ -298,7 +298,6 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
                     ++i;
                     break;
                 case 5:
-                    sort_single_hand(game_board->h, sortMethod);
                     if (sortMethod == NUMERO){
                         sortMethod = NAIPE;
                     } else {
@@ -312,6 +311,7 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
                     tStop();
                     break;
             }
+            sort_single_hand(game_board->h, sortMethod);
         
 
 
