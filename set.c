@@ -145,7 +145,7 @@ Set *new_set (Set *set, bool is_run, char *pieces[], unsigned num_of_pieces) {
 
     if (is_new_set_possible (is_run, pieces, num_of_pieces) == false) {
         printf ("Jogada invalida\n");
-        tStop();
+        /* tStop(); */
         return NULL;
     }
 
@@ -154,9 +154,7 @@ Set *new_set (Set *set, bool is_run, char *pieces[], unsigned num_of_pieces) {
         aux_set = init_set(is_run, 0, num_of_pieces);	//Como é o primeiro, o index é zero
 
         // Insere as novas pecas
-        aux_set->set_piece = malloc (num_of_pieces);
         for (i = 0; i < num_of_pieces; ++i) {
-            aux_set->set_piece[i] = malloc(2);
             aux_set->set_piece[i][0] = pieces[i][0];
             aux_set->set_piece[i][1] = pieces[i][1];
         }
@@ -177,9 +175,7 @@ Set *new_set (Set *set, bool is_run, char *pieces[], unsigned num_of_pieces) {
   
 
     // Insere as pecas no set
-    aux_set->set_piece = malloc (num_of_pieces);
     for (i = 0; i < num_of_pieces; ++i) {
-        aux_set->set_piece[i] = malloc(2);
         aux_set->set_piece[i][0] = pieces[i][0];
         aux_set->set_piece[i][1] = pieces[i][1];
     }
@@ -189,17 +185,14 @@ Set *new_set (Set *set, bool is_run, char *pieces[], unsigned num_of_pieces) {
 
 
 void insert_in_set (Set *dest_set, bool is_run, char *pieces[], unsigned num_of_pieces) {
-    
     if (insert_set_possible (dest_set, is_run, pieces, num_of_pieces) == false) {
         printf ("Jogada invalida");
         return;
     }
-	
-	// Insere as novas pecas no set
-	for (int i = 0; i < num_of_pieces; ++i) {
-		dest_set->set_piece[i + dest_set->num_of_pieces][0] = pieces[i][0];	
-		dest_set->set_piece[i + dest_set->num_of_pieces][1] = pieces[i][1];	
-	}	
+    for (int i = dest_set->num_of_pieces; i < dest_set->num_of_pieces + num_of_pieces; ++i) {
+        dest_set->set_piece[dest_set->num_of_pieces][0] = pieces[0][0];
+        dest_set->set_piece[dest_set->num_of_pieces][1] = pieces[0][1];
+    }	
 	// Aumenta o numero de pecas do set
 	dest_set->num_of_pieces += num_of_pieces;
 }
@@ -209,32 +202,41 @@ bool insert_set_possible (Set *dest_set, bool is_run, char *pieces[], unsigned n
 
     // Numero de pecas total apos a insercao
     unsigned total_num_of_pieces = dest_set->num_of_pieces + num_of_pieces;
-
+    
     // Preenche um novo array de pecas com pecas do set + pecas a serem inseridas
-    char **new_pieces = NULL; 
-    for (int i = 0; i < dest_set->num_of_pieces; ++i) {
+    char *new_pieces[13]; 
+
+    for (int i = 0; i < total_num_of_pieces + 1; ++i) {
+        new_pieces[i] = malloc (2);
+    }
+
+    for (int i = 0; i < total_num_of_pieces; ++i) {
+        if (i >= dest_set->num_of_pieces) {
+            new_pieces[i][0] = pieces[0][0];
+            new_pieces[i][1] = pieces[0][1];
+            continue;
+        } 
         new_pieces[i][0] = dest_set->set_piece[i][0];
         new_pieces[i][1] = dest_set->set_piece[i][1];
     }
 
-    for (int i = dest_set->num_of_pieces - 1; i < total_num_of_pieces; ++i) {
-        new_pieces[i][0] = pieces[i][0];
-        new_pieces[i][1] = pieces[i][1];
-    }
 
     // Primeiro teste: Numero de pecas total < 13
     if (dest_set->num_of_pieces + num_of_pieces > 13) {
+        printf ("Numero total de pecas maior do que 13\n");
         return false;    
     }
 
 	// Segundo teste: Exceto coringa, nao deve haver pecas repetidas
 	if (have_same_piece (new_pieces, total_num_of_pieces) == true) {
+        printf ("Ha pecas repetidas no set\n");
 		return false;
 	}
 	
 	// Terceiro teste: se o set for do tipo run, deve ser uma sequencia
 	if (is_run == true) {
 		if (is_a_sequence (new_pieces, total_num_of_pieces) == false) {
+            printf ("O set nao eh uma sequencia\n");
 			return false;
 		}
 	}
@@ -242,6 +244,7 @@ bool insert_set_possible (Set *dest_set, bool is_run, char *pieces[], unsigned n
 	// Quarto teste: Se o teste for do tipo group, deve ter o mesmo numero
 	if (is_run == false) {
 		if (have_same_number (new_pieces, total_num_of_pieces) == false) {
+            printf ("O set possui pecas de numeros diferentes \n");
 			return false;
 		}
 	}

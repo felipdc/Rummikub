@@ -213,17 +213,17 @@ Set *createSet(Hand *Player, Set *set) {
 
 Set *insert_occup_set(Board *game_board){
 
-    Hand *Aux = game_board->h;
-    Set *aux_set = game_board->s;
     char cards[50];
     char **pieces;
     int numOfPieces;
-    int i = 0;
-    int j = 0;
     int set_index = 0;
     int pieces_index = 0;
-    int equalCount = 1;
-    bool isRun;
+    int i = 0;
+    
+    if (game_board->s == NULL) {
+        printf ("Nao ha nenhum set na mesa");
+        return game_board->s;
+    }
 
     printf("Em qual set deseja inserir? ");
     scanf("%d", &set_index);
@@ -238,11 +238,12 @@ Set *insert_occup_set(Board *game_board){
     if(cards[0] == '0'){
         return game_board->s;
     }
+
     for (i = 0; i <= strlen(cards); i++){
         if ((cards[i] == ' ' && cards[i+1] != '\0') || cards[i] == '\0'){
             numOfPieces++;
         } else if (cards[i+1] == ' ' || (cards[i+1] == '\0' && cards[i] != ' ')){
-            pieces[pieces_index++] = malloc(2);
+            pieces[pieces_index++] = malloc(3);
             pieces[numOfPieces][0] = cards[i-1];
             pieces[numOfPieces][1] = cards[i];
             pieces[numOfPieces][2] = '\0';
@@ -250,7 +251,18 @@ Set *insert_occup_set(Board *game_board){
     }
 
     //Ainda falta procurar e inserir
-
+    // Procura set pelo index 
+    Set *aux_set = game_board->s;
+    while (aux_set->set_idx != set_index) {
+        if (aux_set->next == NULL) {
+            printf ("Set nao encontrado!\n");
+            return game_board->s;
+        }
+        aux_set = aux_set->next;
+    }
+    // Insere as cartas no set
+    insert_in_set (aux_set, aux_set->run, pieces, numOfPieces);
+    
     return game_board->s;
 }
 
