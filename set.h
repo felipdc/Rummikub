@@ -11,7 +11,6 @@ struct set {
 	struct set *next;	// Aponta para o proximo set formado no jogo
 }; typedef struct set Set;
 
-
 /**
  * @desc Cria um novo set no jogo
  * @param Set *set - Lista de sets atuais do jogo

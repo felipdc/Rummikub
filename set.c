@@ -138,7 +138,7 @@ static bool is_a_sequence (char *pieces[2], unsigned num_of_pieces) {
 }
 
 
-Set * new_set (Set *set, bool is_run, char *pieces[], unsigned num_of_pieces) {
+Set *new_set (Set *set, bool is_run, char *pieces[], unsigned num_of_pieces) {
     
     Set *aux_set = set;
     int i = 0;
@@ -183,6 +183,7 @@ Set * new_set (Set *set, bool is_run, char *pieces[], unsigned num_of_pieces) {
         aux_set->set_piece[i][0] = pieces[i][0];
         aux_set->set_piece[i][1] = pieces[i][1];
     }
+
     return set;
 }
 
@@ -210,12 +211,12 @@ bool insert_set_possible (Set *dest_set, bool is_run, char *pieces[], unsigned n
     unsigned total_num_of_pieces = dest_set->num_of_pieces + num_of_pieces;
 
     // Preenche um novo array de pecas com pecas do set + pecas a serem inseridas
-    char *new_pieces[2]; 
+    char **new_pieces = NULL; 
     for (int i = 0; i < dest_set->num_of_pieces; ++i) {
         new_pieces[i][0] = dest_set->set_piece[i][0];
         new_pieces[i][1] = dest_set->set_piece[i][1];
     }
-    
+
     for (int i = dest_set->num_of_pieces - 1; i < total_num_of_pieces; ++i) {
         new_pieces[i][0] = pieces[i][0];
         new_pieces[i][1] = pieces[i][1];
@@ -294,7 +295,7 @@ void show_set (Set *set) {
             printf("\n\n");
             cCount = (aux_set->num_of_pieces)*5;   
         } 
-        printf(" [");
+        printf("%d: [", (aux_set->set_idx + 1));
         for (int i = 0; i < (aux_set->num_of_pieces)-1; ++i) {
             printf ("%c%c, ", aux_set->set_piece[i][0], aux_set->set_piece[i][1]);
         }

@@ -6,6 +6,7 @@
 #include "pack.h"
 #include "main.h"
 #include "interface.h"
+#include "set.h"
 
 
 Hand *init_hand(){	//Inicializa uma mão de um jogador
@@ -127,7 +128,7 @@ void victory(Board *board){
 	}
 }
 
-void *sort_hands(Hand *Player, int numOfPlayers){
+void sort_hands(Hand *Player, int numOfPlayers){
 	Hand *Aux = Player;
 	int i = 0;
 	int k = 0;

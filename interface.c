@@ -15,8 +15,8 @@ void tStop(){
 
 void removeNL(char *input){                             // Função para remover o \n do fgets
     size_t len = strlen(input);
-        if (len > 0 && input[len-1] == '\n') {
-            input[--len] = '\0';
+    if (len > 0 && input[len-1] == '\n') {
+        input[--len] = '\0';
     }
 }
 
@@ -106,7 +106,7 @@ void showAllHands(Hand* Player, int numOfPlayers, int activePlayer){
 }
 
 
-Set* createSet(Hand *Player, Set *set) {
+Set *createSet(Hand *Player, Set *set) {
     Hand *Aux = Player;
     char cards[50];
     int numOfPieces;
@@ -137,7 +137,7 @@ Set* createSet(Hand *Player, Set *set) {
         isRun = true;
         equalCount = 0;
         for (int i = 0; i < numOfPieces; i++){
-            if(pieces[i][0] != (pieces[0][0]+i) && pieces[i][0] != '*'){
+            if((pieces[i][0] != (pieces[0][0]+i)) && pieces[i][0] != '*'){
                 isRun = false;
             }
             for(int j = 0; j < Aux->card_num; j++){
@@ -150,11 +150,13 @@ Set* createSet(Hand *Player, Set *set) {
             printf("\nVoce nao possui essas cartas.");
             tStop();
         } else {
-            for (int i = 0; i < numOfPieces; i++){
-                for(int j = 0; j < Aux->card_num; j++){
-                    if (pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1]){
-                        Aux->piece[j][0] = '0';
-                        Aux->piece[j][1] = '0';
+            if(is_new_set_possible(isRun, pieces, numOfPieces) == true){
+                for (int i = 0; i < numOfPieces; i++){
+                    for(int j = 0; j < Aux->card_num; j++){
+                        if (pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1]){
+                            Aux->piece[j][0] = '0';
+                            Aux->piece[j][1] = '0';
+                        }
                     }
                 }
             }
@@ -205,10 +207,52 @@ Set* createSet(Hand *Player, Set *set) {
 // Função pra checar se ta passando a vez do jogador
 // Apenas um teste
 
+Set *insert_occup_set(Board *game_board){
+
+    Hand *Aux = game_board->h;
+    Set *aux_set = game_board->s;
+    char cards[50];
+    char **pieces;
+    int numOfPieces;
+    int i = 0;
+    int j = 0;
+    int set_index = 0;
+    int pieces_index = 0;
+    int equalCount = 1;
+    bool isRun;
+
+    printf("Em qual set deseja inserir? ");
+    scanf("%d", &set_index);
+    getchar();
+    --set_index;
+    printf("\nEscreva a(s) carta(s) que deseja inserir separadas por \nespaco (Ex: \"4! 5! 6!\") ou \"0\" para voltar.\n");
+    fgets(cards, 50, stdin);
+    removeNL(cards);
+    numOfPieces = 0;
+    pieces = malloc(strlen(cards));
+    
+    if(cards[0] == '0'){
+        return game_board->s;
+    }
+    for (i = 0; i <= strlen(cards); i++){
+        if ((cards[i] == ' ' && cards[i+1] != '\0') || cards[i] == '\0'){
+            numOfPieces++;
+        } else if (cards[i+1] == ' ' || (cards[i+1] == '\0' && cards[i] != ' ')){
+            pieces[pieces_index++] = malloc(2);
+            pieces[numOfPieces][0] = cards[i-1];
+            pieces[numOfPieces][1] = cards[i];
+            pieces[numOfPieces][2] = '\0';
+        }
+    }
+
+    //Ainda falta procurar e inserir
+
+    return game_board->s;
+}
+
 void playerSwitcher(Board *game_board, int numOfPlayers){
     Hand *aux_hand = game_board->h;
     int i = 0;
-    bool hasBought = false;
     while(1) {
         system(CLEAR);
         sort_hands(game_board->h, numOfPlayers);
@@ -239,20 +283,16 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
                     game_board->s = createSet(game_board->h, game_board->s);
                     break;
                 case 2:
-                    // TODO   
+                    game_board->s = insert_occup_set(game_board);
+                    break;
                 case 3:
-                    if(hasBought == false){
-                        game_board->h = get_from_pack (game_board->p, game_board->h);
-                        game_board->p = pop_piece (game_board->p, 1); 
-                        hasBought = true;
-                    } else {
-                        printf("\nVoce ja comprou nesse turno.");
-                        tStop();
-                    }
+                    game_board->h = get_from_pack (game_board->p, game_board->h);
+                    game_board->p = pop_piece (game_board->p, 1);
+                    game_board->h = game_board->h->next;
+                    ++i;
                     break;
                 case 4:
                     game_board->h = game_board->h->next;
-                    hasBought = false;
                     ++i;
                     break;
                 case 5:
