@@ -170,6 +170,55 @@ void sort_hands(Hand *Player, int numOfPlayers){
 	}
 }
 
+void sort_single_hand(Hand *Player, int sortMethod){
+	Hand *Aux = Player;
+	int i = 0;
+	if(sortMethod == NAIPE){
+		while(i < (Aux->card_num)-1){
+			int j = 0;
+			while(j < (Aux->card_num)-1-i) { // Ordena os naipes
+				if ((Aux->piece[j][1] > Aux->piece[j+1][1]) || Aux->piece[j][0] == '0' || Aux->piece[j][1] == '*'){
+					char tmp = Aux->piece[j+1][0];
+					char tmp2 = Aux->piece[j+1][1];
+					Aux->piece[j+1][0] = Aux->piece[j][0];
+					Aux->piece[j+1][1] = Aux->piece[j][1];
+					Aux->piece[j][0] = tmp;
+					Aux->piece[j][1] = tmp2;
+				}
+				j++;
+			}
+			i++;
+		}
+	}
+	i = 0;
+	while(i < (Aux->card_num)-1){
+		int j = 0;
+		while(j < (Aux->card_num)-1-i) { // Ordenas as cartes em seus naipes
+			if(sortMethod == NAIPE){
+				if ((Aux->piece[j][0] > Aux->piece[j+1][0] && Aux->piece[j][1] == Aux->piece[j+1][1])|| Aux->piece[j][0] == '0'|| Aux->piece[j][1] == '*'){
+					char tmp = Aux->piece[j+1][0];
+					char tmp2 = Aux->piece[j+1][1];
+					Aux->piece[j+1][0] = Aux->piece[j][0];
+					Aux->piece[j+1][1] = Aux->piece[j][1];
+					Aux->piece[j][0] = tmp;
+					Aux->piece[j][1] = tmp2;
+				}
+			} else {
+				if ((Aux->piece[j][0] > Aux->piece[j+1][0])|| Aux->piece[j][0] == '0'|| Aux->piece[j][1] == '*'){
+					char tmp = Aux->piece[j+1][0];
+					char tmp2 = Aux->piece[j+1][1];
+					Aux->piece[j+1][0] = Aux->piece[j][0];
+					Aux->piece[j+1][1] = Aux->piece[j][1];
+					Aux->piece[j][0] = tmp;
+					Aux->piece[j][1] = tmp2;
+				}
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
 
 int main (int argc, char *argv[]) {
 

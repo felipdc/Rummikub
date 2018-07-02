@@ -257,9 +257,10 @@ Set *insert_occup_set(Board *game_board){
 void playerSwitcher(Board *game_board, int numOfPlayers){
     Hand *aux_hand = game_board->h;
     int i = 0;
+    sort_hands(game_board->h, numOfPlayers);
+    int sortMethod = NAIPE;
     while(1) {
         system(CLEAR);
-        sort_hands(game_board->h, numOfPlayers);
         printf("===============================================================\n");
         //printf("\n\n\n\n\tOS SETS FICARIAM AQUI, PROVAVELMENTE\n\n\n\n\n");
         /* printSets(9); */
@@ -269,16 +270,13 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
         printf("===============================================================\n");
         //game_board = playsMenu(game_board, (i%numOfPlayers)+1, numOfPlayers);
         
-
-
-        
-        
         printf("[Jogador %d]", (i%numOfPlayers)+1);
         printf("\n\n[1] Colocar set no tabuleiro"); 
         printf("\n[2] Colocar cartas em outros sets");
         printf("\n[3] Comprar do baralho");
         printf("\n[4] Terminar o turno");
-        printf("\n[5] Fechar o programa");
+        printf("\n[5] Trocar a organizacao das cartas na mao");
+        printf("\n\n\n[0] Fechar o programa");
 
             printf("\n\nEscolha sua jogada: ");
             int prompt = intInput();
@@ -300,9 +298,18 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
                     ++i;
                     break;
                 case 5:
+                    sort_single_hand(game_board->h, sortMethod);
+                    if (sortMethod == NUMERO){
+                        sortMethod = NAIPE;
+                    } else {
+                        sortMethod = NUMERO;
+                    }
+                    break;
+                case 0:
                     return;
                 default:
                     printf("Opcao nao encontrada.");
+                    tStop();
                     break;
             }
         

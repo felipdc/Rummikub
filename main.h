@@ -38,6 +38,9 @@
 
 #define INITIAL_HAND_SIZE 14
 
+#define NAIPE 3
+#define NUMERO 4
+
 
 struct hand {
 	unsigned card_num; // Numero total de pecas na mao do jogador
@@ -67,6 +70,8 @@ Board *init_game(Board *board, int NofPlayers);
 void sort_hands(Hand *Player, int numOfPlayers);
 
 void show_hand(Hand *Player);
+
+void sort_single_hand(Hand *Player, int sortMethod);
 
 
 #endif // MAIN_H__
