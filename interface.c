@@ -211,6 +211,29 @@ Set *createSet(Hand *Player, Set *set) {
 // Função pra checar se ta passando a vez do jogador
 // Apenas um teste
 
+Hand *erase_piece(Hand *Player, char **piece, int numOfPieces){
+
+    int i = 0;
+    int j = 0;
+    bool erased = false;
+
+    while(j < numOfPieces){
+        i = 0;
+        erased = false;
+        while(i < NUM_PIECES){
+            if(((Player->piece[i][0] == piece[j][0]) && (Player->piece[i][1] == piece[j][1])) && (erased == false)){
+                Player->piece[i][0] = '0';
+                Player->piece[i][1] = '0';
+                erased = true;
+            }
+            ++i;
+        }
+        ++j;
+    }
+
+    return Player;
+}
+
 Set *insert_occup_set(Board *game_board){
 
     char cards[50];
@@ -254,14 +277,17 @@ Set *insert_occup_set(Board *game_board){
     // Procura set pelo index 
     Set *aux_set = game_board->s;
     while (aux_set->set_idx != set_index) {
-        if (aux_set->next == NULL) {
+        if (aux_set == NULL) {
             printf ("Set nao encontrado!\n");
             return game_board->s;
         }
         aux_set = aux_set->next;
     }
     // Insere as cartas no set
+    printf("jnasd %d\n", numOfPieces);
     insert_in_set (aux_set, aux_set->run, pieces, numOfPieces);
+
+    game_board->h = erase_piece(game_board->h, pieces, numOfPieces);
     
     return game_board->s;
 }
@@ -274,8 +300,6 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
     while(1) {
         system(CLEAR);
         printf("===============================================================\n");
-        //printf("\n\n\n\n\tOS SETS FICARIAM AQUI, PROVAVELMENTE\n\n\n\n\n");
-        /* printSets(9); */
         show_set (game_board->s);
         printf("\n===============================================================\n\n");
         showAllHands(aux_hand, numOfPlayers, (i%numOfPlayers)+1);
@@ -288,7 +312,7 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
         printf("\n[3] Comprar do baralho");
         printf("\n[4] Terminar o turno");
         printf("\n[5] Trocar a organizacao das cartas na mao");
-        printf("\n\n\n[0] Fechar o programa");
+        printf("\n[0] Fechar o programa");
 
             printf("\n\nEscolha sua jogada: ");
             int prompt = intInput();
