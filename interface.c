@@ -114,13 +114,13 @@ Set *createSet(Hand *Player, Set *set) {
     int pieces_index = 0;
     bool isRun;
     int equalCount;
+    pieces = malloc (strlen(cards));
 
     while(1){
         printf("\nEscreva o set com as cartas separadas por \nespaco (Ex: \"4! 5! 6!\") ou \"0\" para voltar.\n");
         fgets(cards, 50, stdin);
         removeNL(cards);
         numOfPieces = 0;
-        pieces = malloc (strlen(cards));
         if(cards[0] == '0'){
             return set;
         }
@@ -128,7 +128,7 @@ Set *createSet(Hand *Player, Set *set) {
             if ((cards[i] == ' ' && cards[i+1] != '\0') || cards[i] == '\0'){
                 numOfPieces++;
             } else if (cards[i+1] == ' ' || (cards[i+1] == '\0' && cards[i] != ' ')){
-                pieces[pieces_index++] = malloc(2);
+                pieces[pieces_index++] = malloc(3);
                 pieces[numOfPieces][0] = cards[i-1];
                 pieces[numOfPieces][1] = cards[i];
                 pieces[numOfPieces][2] = '\0';
@@ -148,6 +148,7 @@ Set *createSet(Hand *Player, Set *set) {
         }
         if (equalCount != numOfPieces){
             printf("\nVoce nao possui essas cartas.");
+            pieces_index = 0;
             tStop();
         } else {
             if(is_new_set_possible(isRun, pieces, numOfPieces) == true){
