@@ -150,13 +150,13 @@ Set *createSet(Hand *Player, Set *set) {
                 }
             }
         }
-        tStop();
         if (equalCount != numOfPieces){
             printf("\nVoce nao possui essas cartas.");
             pieces_index = 0;
             tStop();
         } else {
             if(is_new_set_possible(isRun, pieces, numOfPieces) == true){
+                Aux->card_num -= numOfPieces;
                 for (int i = 0; i < numOfPieces; i++){
                     erased = false;
                     for(int j = 0; j < Aux->card_num; j++){
@@ -234,6 +234,7 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
     int i = 0;
     sort_hands(game_board->h, numOfPlayers);
     int sortMethod = NAIPE;
+    bool played = false;
     while(1) {
         system(CLEAR);
         printf("===============================================================\n");
@@ -258,19 +259,32 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
             switch(prompt) {
                 case 1:
                     game_board->s = createSet(game_board->h, game_board->s);
+                    played = true;
                     break;
                 case 2:
                     game_board->s = insert_occup_set(game_board);
+                    played = true;
                     break;
                 case 3:
                     game_board->h = get_from_pack (game_board->p, game_board->h);
                     game_board->p = pop_piece (game_board->p, 1);
                     game_board->h = game_board->h->next;
+                    played = false;
                     ++i;
                     break;
                 case 4:
-                    game_board->h = game_board->h->next;
-                    ++i;
+                    if(aux_hand->card_num == 0){
+                        printf("\n\nO vencedor é o jogador %d!\n", (i%numOfPlayers)+1);
+                        return;
+                    }
+                    if(played == false){
+                        printf("Voce ainda nao fez sua jogada!");
+                        tStop();
+                    } else {
+                        game_board->h = game_board->h->next;
+                        played = false;
+                        ++i;
+                    }
                     break;
                 case 5:
                     if (sortMethod == NUMERO){
@@ -288,11 +302,6 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
             }
             sort_single_hand(game_board->h, sortMethod);
         
-
-
-
-        // Passa para o proximo jogador
-        //game_board->h = game_board->h->next;
         if (game_board == NULL) {
             return;
         }
