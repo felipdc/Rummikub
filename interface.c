@@ -113,6 +113,7 @@ Set *createSet(Hand *Player, Set *set) {
     char **pieces;
     int pieces_index = 0;
     bool isRun;
+    bool erased;
     int equalCount;
     pieces = malloc (strlen(cards));
 
@@ -153,10 +154,12 @@ Set *createSet(Hand *Player, Set *set) {
         } else {
             if(is_new_set_possible(isRun, pieces, numOfPieces) == true){
                 for (int i = 0; i < numOfPieces; i++){
+                    erased = false;
                     for(int j = 0; j < Aux->card_num; j++){
-                        if (pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1]){
+                        if ((pieces[i][0] == Aux->piece[j][0] && pieces[i][1] == Aux->piece[j][1]) && erased == false){
                             Aux->piece[j][0] = '0';
                             Aux->piece[j][1] = '0';
+                            erased = true;
                         }
                     }
                 }
