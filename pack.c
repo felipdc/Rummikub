@@ -5,6 +5,7 @@
 #include <string.h>
 #include "main.h"
 #include "pack.h"
+#include "interface.h"
 
 
 const char *blue_piece[] = {"1!", "2!", "3!", "4!",
@@ -202,4 +203,48 @@ Piece *pop_piece(Piece *head, int n){
 	return Aux;
 }
 
+Piece *init_piece(Piece *New){
+
+	New = (Piece *)malloc(sizeof(Piece));
+	if(New == NULL){
+		printf("Erro!\n");
+		return New;
+	}
+	New->color = none;
+	New->info[0] = '0';
+	New->info[1] = '0';
+	New->next = NULL;
+
+	return New;
+}
+
+Piece *get_from_file(Piece *Pack){
+
+	FILE *Pieces = fopen("baralho.txt", "rt");
+	Piece *Aux = NULL;
+	Aux = init_piece(Aux);
+
+	while(fgets(Aux->info, 4, Pieces)){
+		removeNL(Aux->info);
+		switch(Aux->info[1]){
+			case '!':	//blue !
+				Aux->color = blue;
+				break;
+			case '@': //yellow @
+				Aux->color = yellow;
+				break;
+			case '#': //black #
+				Aux->color = black;
+				break;
+			case '$': //red $
+				Aux->color = red;
+				break;
+		}
+		Pack = push_piece(Pack, Aux);
+		Aux = init_piece(Aux);
+	}
+	fclose(Pieces);
+	free(Aux);
+	return Pack;
+}
 

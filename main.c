@@ -223,7 +223,7 @@ void sort_single_hand(Hand *Player, int sortMethod){
 int main (int argc, char *argv[]) {
 
 	/* int i = 0; */
-	
+
 	Board *NewBoard = init_board();	// Cria e aloca memoria para NewBoard
 
 	int numOfPlayers = startMenu(); // Splash screen do jogo, retorna o numero de jogadores
@@ -232,7 +232,7 @@ int main (int argc, char *argv[]) {
 	NewBoard = init_game(NewBoard, numOfPlayers);
 	sort_hands(NewBoard->h, numOfPlayers);
 	playerSwitcher(NewBoard, numOfPlayers);
-
+	
 	// Fim dos testes
 
 	return 0;

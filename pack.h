@@ -20,5 +20,7 @@ Piece *create_pack(Piece *Pack);
 void show_pack(Piece *pack);
 void switch_piece(Piece *Pack, int Posit1, int Posit2);
 void shuffle_pack(Piece *Pack, int Len);
+Piece *init_piece(Piece *New);
+Piece *get_from_file(Piece *Pack);
 
 #endif // PACK_H_
