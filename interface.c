@@ -128,7 +128,7 @@ Set* createSet(Hand *Player, Set *set) {
             if ((cards[i] == ' ' && cards[i+1] != '\0') || cards[i] == '\0'){
                 numOfPieces++;
             } else if (cards[i+1] == ' ' || (cards[i+1] == '\0' && cards[i] != ' ')){
-                pieces[pieces_index++] = malloc(2);
+                pieces[pieces_index++] = malloc(3);
                 pieces[numOfPieces][0] = cards[i-1];
                 pieces[numOfPieces][1] = cards[i];
                 pieces[numOfPieces][2] = '\0';
@@ -148,6 +148,7 @@ Set* createSet(Hand *Player, Set *set) {
         }
         if (equalCount != numOfPieces){
             printf("\nVoce nao possui essas cartas.");
+            pieces_index = 0;
             tStop();
         } else {
             for (int i = 0; i < numOfPieces; i++){
