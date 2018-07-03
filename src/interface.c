@@ -200,7 +200,8 @@ Hand *erase_piece(Hand *Player, char **piece, int numOfPieces){
         }
         ++j;
     }
-
+    sort_single_hand(Player, NAIPE);
+    Player->card_num -= 1;
     return Player;
 }
 
@@ -220,7 +221,6 @@ Set *insert_occup_set(Board *game_board){
 
     printf("Em qual set deseja inserir? ");
     set_index = intInput();
-    getchar();
     --set_index;
     printf("\nEscreva a(s) carta(s) que deseja inserir separadas por \nespaco (Ex: \"4! 5! 6!\") ou \"0\" para voltar.\n");
     fgets(cards, 50, stdin);
@@ -255,9 +255,8 @@ Set *insert_occup_set(Board *game_board){
     }
     // Insere as cartas no set
     insert_in_set (aux_set, aux_set->run, pieces, numOfPieces);
-    if(is_new_set_possible(aux_set->run, pieces, numOfPieces) == true){ 
-        game_board->h = erase_piece(game_board->h, pieces, numOfPieces);
-    }
+    game_board->h = erase_piece(game_board->h, pieces, numOfPieces);
+
     
     return game_board->s;
 }
@@ -334,11 +333,6 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
                     break;
             }
             sort_single_hand(game_board->h, sortMethod);
-            k = 0;
-            while(aux_hand->piece[k][0] != '0'){
-                k++;
-            }
-            aux_hand->card_num = k;
         
         if (game_board == NULL) {
             return;
