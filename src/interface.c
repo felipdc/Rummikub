@@ -219,7 +219,7 @@ Set *insert_occup_set(Board *game_board){
     }
 
     printf("Em qual set deseja inserir? ");
-    scanf("%d", &set_index);
+    set_index = intInput();
     getchar();
     --set_index;
     printf("\nEscreva a(s) carta(s) que deseja inserir separadas por \nespaco (Ex: \"4! 5! 6!\") ou \"0\" para voltar.\n");
@@ -255,8 +255,9 @@ Set *insert_occup_set(Board *game_board){
     }
     // Insere as cartas no set
     insert_in_set (aux_set, aux_set->run, pieces, numOfPieces);
-
-    game_board->h = erase_piece(game_board->h, pieces, numOfPieces);
+    if(is_new_set_possible(aux_set->run, pieces, numOfPieces) == true){ 
+        game_board->h = erase_piece(game_board->h, pieces, numOfPieces);
+    }
     
     return game_board->s;
 }
@@ -279,7 +280,6 @@ void playerSwitcher(Board *game_board, int numOfPlayers){
         //game_board = playsMenu(game_board, (i%numOfPlayers)+1, numOfPlayers);
         
         printf("[Jogador %d]", (i%numOfPlayers)+1);
-        printf("\naux_hand->card_num = %d", aux_hand->card_num);
         printf("\n\n[1] Colocar set no tabuleiro"); 
         printf("\n[2] Colocar cartas em outros sets");
         printf("\n[3] Comprar do baralho");

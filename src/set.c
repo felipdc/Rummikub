@@ -187,6 +187,7 @@ Set *new_set (Set *set, bool is_run, char *pieces[], unsigned num_of_pieces) {
 void insert_in_set (Set *dest_set, bool is_run, char *pieces[], unsigned num_of_pieces) {
     if (insert_set_possible (dest_set, is_run, pieces, num_of_pieces) == false) {
         printf ("Jogada invalida");
+        tStop();
         return;
     }
     for (int i = dest_set->num_of_pieces; i < dest_set->num_of_pieces + num_of_pieces; ++i) {
