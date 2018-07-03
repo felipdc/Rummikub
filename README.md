@@ -1,5 +1,5 @@
 # C Rummikub
-C Rummikub é uma implementação do jogo de mesa Rummikub na linguagem C. O game foi implementado para ser jogado em multiplayer.
+C Rummikub é uma implementação do jogo de mesa Rummikub na linguagem C. O game foi implementado utilizando algumas técnicas de estrutura de dados, como pilhas, listas circulares e filas. C Rummikub foi feito para ser jogado em multiplayer.
 
 ## Início
 ### Pré-requisitos
