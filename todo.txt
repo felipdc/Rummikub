@@ -1,7 +1,0 @@
--- Algumas funcoes basicas que temos que implementar
--- Adicionem as funcoes aqui caso lembrem de alguma
--- Editem conforme necessidade do programa
-
--- Adicionar peças em sets existentes
--- Fazer a funcao de trocar pecas entre sets
--- Fazer a funcao que le as cartas de um arquivo como pedido
