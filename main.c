@@ -61,6 +61,7 @@ Hand *hand_out(Piece *Pack, Hand *Player, int NPieces){	//Distribui NPieces do p
 
 	while(i < NPieces){
 		strcpy(Player->piece[i], Temp->info);
+		//Player->piece[i] = Temp->info;
 		++i;
 		Temp = Temp->next;
 	}
@@ -229,7 +230,6 @@ int main (int argc, char *argv[]) {
 	printf("\n");
 
 	NewBoard = init_game(NewBoard, numOfPlayers);
-	show_hand(NewBoard->h);
 	sort_hands(NewBoard->h, numOfPlayers);
 	playerSwitcher(NewBoard, numOfPlayers);
 	

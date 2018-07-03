@@ -293,10 +293,10 @@ void show_set (Set *set) {
     Set *aux_set = set;
     int cCount = 0;
     while (aux_set != NULL) {
-        cCount += aux_set->num_of_pieces*5;
+        cCount += aux_set->num_of_pieces*6;
         if (cCount > 62){
             printf("\n\n");
-            cCount = (aux_set->num_of_pieces)*5;   
+            cCount = (aux_set->num_of_pieces)*6;   
         } 
         printf("%d: [", (aux_set->set_idx + 1));
         for (int i = 0; i < (aux_set->num_of_pieces)-1; ++i) {
