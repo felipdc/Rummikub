@@ -15,6 +15,6 @@ Novamente no terminal, execute o comando:
 $ ./main
 '''
 ## Autores
-Ivan Mateus - https://github.com/ivanmateus
-Felipe De Carli - https://github.com/felipdc
-Gabriel Dezan - https://github.com/gdezan
+Ivan Mateus - https://github.com/ivanmateus  
+Felipe De Carli - https://github.com/felipdc  
+Gabriel Dezan - https://github.com/gdezan  
